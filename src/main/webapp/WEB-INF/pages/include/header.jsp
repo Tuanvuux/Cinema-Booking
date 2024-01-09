@@ -30,6 +30,7 @@
                             <sec:authorize access="isAuthenticated()">
                                 <sec:authorize access="hasRole('ROLE_ADMIN')">
                                     <a href="<c:url value="/admin/home" />">Admin Home</a>
+                                    <a href="<c:url value="/admin/add" />">Add Account</a>
                                 </sec:authorize>
                                 <a href="<c:url value="/logout" />">Logout</a>
                             </sec:authorize>
