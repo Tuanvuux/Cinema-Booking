@@ -17,6 +17,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.Arrays;
+import java.util.HashSet;
 
 @Controller
 public class LoginController {
@@ -44,12 +46,16 @@ public class LoginController {
         model.addAttribute("message", "Hello Admin: " + username);
         return "admin/home";
     }
+
+    @RequestMapping(value = "/admin/add")
+    public String addAccount(){
+        return "/admin/add";
+    }
     @PostMapping(value = "/admin/add")
     public String addAccount(@RequestParam("email") String email,
                              @RequestParam("password") String password,
                              Model model) {
 
-        // Kiểm tra đầu vào (bạn có thể thêm nhiều logic kiểm tra hơn)
         if (email.isEmpty() || password.isEmpty()) {
             model.addAttribute("error", "Email và mật khẩu không thể để trống.");
             return "/admin/add";
@@ -62,19 +68,15 @@ public class LoginController {
             return "/admin/add";
         }
 
-        // Tạo một đối tượng tài khoản mới và đặt các thuộc tính của nó
         AccountEntity newAccount = new AccountEntity();
         newAccount.setEmail(email);
         newAccount.setPassword(password);
-        newAccount.setStatus(UserStatus.ACTIVE); // Đặt trạng thái ban đầu theo cần thiết
+        newAccount.setStatus(UserStatus.ACTIVE);
 
-        // Bạn có thể đặt vai trò người dùng nếu cần, ví dụ:
-        // newAccount.setUserRoles(new HashSet<>(Arrays.asList(RoleEntity.ROLE_USER)));
+//        newAccount.setUserRoles(new HashSet<>(Arrays.asList(RoleEntity.ROLE_USER)));
 
-        // Lưu tài khoản mới
         accountRepository.save(newAccount);
 
-        // Chuyển hướng đến trang thành công hoặc bất kỳ trang khác phù hợp
         return "redirect:/admin/add"; // Change the redirect path to the appropriate page
     }
 
