@@ -9,18 +9,18 @@
 </head>
 
 <body>
-    <form:form class="mb-3" modelAttribute="account" action="${pageContext.request.contextPath}/admin/add" method="post">
+    <form:form class="mb-3" action="${pageContext.request.contextPath}/admin/add" method="post">
         <table>
             <tr>
                 <td>
-                    <form:label path="email">Email:</form:label>
-                    <form:input class="form-control" path="email" required="true" placeholder="Email" />
+                    <label path="email">Email:</label>
+                    <input class="form-control" id="email" name="email" required="true" placeholder="Email" />
                 </td>
             </tr>
             <tr>
                 <td>
-                    <form:label path="password">Password:</form:label>
-                    <form:input class="form-control" path="password" required="true" placeholder="Password" />
+                    <label path="password">Password:</label>
+                    <input class="form-control" id="password" name="password" required="true" placeholder="Password" type="password"/>
                 </td>
             </tr>
 
@@ -28,6 +28,7 @@
                 <td colspan="2">
                     <input class="btn btn-primary" type="submit" value="Add User">
                 </td>
+                ${error}
             </tr>
         </table>
     </form:form>

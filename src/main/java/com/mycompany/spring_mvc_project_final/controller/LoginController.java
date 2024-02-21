@@ -6,12 +6,16 @@
 package com.mycompany.spring_mvc_project_final.controller;
 
 import com.mycompany.spring_mvc_project_final.entities.AccountEntity;
+import com.mycompany.spring_mvc_project_final.entities.RoleEntity;
+import com.mycompany.spring_mvc_project_final.enums.Role;
 import com.mycompany.spring_mvc_project_final.enums.UserStatus;
 import com.mycompany.spring_mvc_project_final.repository.AccountRepository;
+import com.mycompany.spring_mvc_project_final.repository.RoleRepository;
 import com.mycompany.spring_mvc_project_final.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,12 +23,18 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Controller
 public class LoginController {
 
     @Autowired
+    BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired
     AccountRepository accountRepository;
+    @Autowired
+    RoleRepository roleRepository;
 
     @RequestMapping("/login")
     public String loginPage(Model model, @RequestParam(value = "error", required = false) boolean error) {
@@ -47,7 +57,7 @@ public class LoginController {
         return "admin/home";
     }
 
-    @RequestMapping(value = "/admin/add")
+    @GetMapping(value = "/admin/add")
     public String addAccount(){
         return "/admin/add";
     }
@@ -70,14 +80,23 @@ public class LoginController {
 
         AccountEntity newAccount = new AccountEntity();
         newAccount.setEmail(email);
-        newAccount.setPassword(password);
+        newAccount.setPassword(bCryptPasswordEncoder.encode(password));
         newAccount.setStatus(UserStatus.ACTIVE);
 
-//        newAccount.setUserRoles(new HashSet<>(Arrays.asList(RoleEntity.ROLE_USER)));
+        // muon lay role tu DB thi sd RoleRepository de select toan bo list role
+
+        List<RoleEntity> roleEntityList = roleRepository.findAll();
+//       Set<RoleEntity> roleEntitySet = new HashSet<>();
+//       RoleEntity roleEntity = new RoleEntity();
+//       roleEntity.setRole(Role.ROLE_USER);
+//       roleEntitySet.add(roleEntity);
+        Set<RoleEntity> roleEntitySet = new HashSet<RoleEntity>(roleEntityList);
+
+        newAccount.setUserRoles(roleEntitySet);
 
         accountRepository.save(newAccount);
 
-        return "redirect:/admin/add"; // Change the redirect path to the appropriate page
+        return "redirect:/admin/home"; // Change the redirect path to the appropriate page
     }
 
 
