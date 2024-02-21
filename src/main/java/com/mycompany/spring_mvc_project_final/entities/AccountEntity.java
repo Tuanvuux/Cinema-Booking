@@ -7,10 +7,7 @@ package com.mycompany.spring_mvc_project_final.entities;
 
 import com.mycompany.spring_mvc_project_final.enums.UserStatus;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -22,8 +19,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -49,7 +44,7 @@ public class AccountEntity implements Serializable {
             inverseJoinColumns = @JoinColumn(
                     name = "role_id",
                     referencedColumnName = "id"))
-    private Set<RoleEntity> userRoles;
+    private Set<Role> userRoles;
 
     public AccountEntity() {
     }
@@ -78,11 +73,11 @@ public class AccountEntity implements Serializable {
         this.password = password;
     }
 
-    public Set<RoleEntity> getUserRoles() {
+    public Set<Role> getUserRoles() {
         return userRoles;
     }
 
-    public void setUserRoles(Set<RoleEntity> userRoles) {
+    public void setUserRoles(Set<Role> userRoles) {
         this.userRoles = userRoles;
     }
 
