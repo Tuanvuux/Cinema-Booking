@@ -6,7 +6,7 @@
 package com.mycompany.spring_mvc_project_final.service;
 
 import com.mycompany.spring_mvc_project_final.entities.AccountEntity;
-import com.mycompany.spring_mvc_project_final.entities.RoleEntity;
+import com.mycompany.spring_mvc_project_final.entities.Role;
 import com.mycompany.spring_mvc_project_final.enums.UserStatus;
 import java.util.HashSet;
 import java.util.Set;
@@ -37,10 +37,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException(email);
         }
-        Set<RoleEntity> roleNames = userRoleRepository.findByUsers_Email(email);
+        Set<Role> roleNames = userRoleRepository.findByUsers_Email(email);
         Set<GrantedAuthority> grantList = new HashSet<>();
         if (!CollectionUtils.isEmpty(roleNames)) {
-            for (RoleEntity role : roleNames) {
+            for (Role role : roleNames) {
                 GrantedAuthority authority = new SimpleGrantedAuthority(role.getRole().toString());
                 grantList.add(authority);
             }

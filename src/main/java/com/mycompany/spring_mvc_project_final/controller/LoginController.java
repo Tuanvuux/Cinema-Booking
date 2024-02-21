@@ -6,12 +6,10 @@
 package com.mycompany.spring_mvc_project_final.controller;
 
 import com.mycompany.spring_mvc_project_final.entities.AccountEntity;
-import com.mycompany.spring_mvc_project_final.entities.RoleEntity;
-import com.mycompany.spring_mvc_project_final.enums.Role;
+import com.mycompany.spring_mvc_project_final.entities.Role;
 import com.mycompany.spring_mvc_project_final.enums.UserStatus;
 import com.mycompany.spring_mvc_project_final.repository.AccountRepository;
 import com.mycompany.spring_mvc_project_final.repository.RoleRepository;
-import com.mycompany.spring_mvc_project_final.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,7 +19,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -85,14 +82,14 @@ public class LoginController {
 
         // muon lay role tu DB thi sd RoleRepository de select toan bo list role
 
-        List<RoleEntity> roleEntityList = roleRepository.findAll();
+        List<Role> roleList = roleRepository.findAll();
 //       Set<RoleEntity> roleEntitySet = new HashSet<>();
 //       RoleEntity roleEntity = new RoleEntity();
 //       roleEntity.setRole(Role.ROLE_USER);
 //       roleEntitySet.add(roleEntity);
-        Set<RoleEntity> roleEntitySet = new HashSet<RoleEntity>(roleEntityList);
+        Set<Role> roleSet = new HashSet<Role>(roleList);
 
-        newAccount.setUserRoles(roleEntitySet);
+        newAccount.setUserRoles(roleSet);
 
         accountRepository.save(newAccount);
 
