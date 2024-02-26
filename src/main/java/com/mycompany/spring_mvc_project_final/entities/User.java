@@ -3,6 +3,7 @@ package com.mycompany.spring_mvc_project_final.entities;
 import sun.security.krb5.internal.Ticket;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 

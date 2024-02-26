@@ -42,7 +42,8 @@ public class Ticket {
     @JoinColumn(name = "showTimeId")
     private ShowTime showTime;
 
-    @OneToOne(mappedBy = "ticket")
+    @ManyToOne
+    @JoinColumn(name = "paymentId")
     private PaymentHistory paymentHistory;
 
     public Long getTicketId() {

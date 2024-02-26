@@ -27,9 +27,8 @@ public class PaymentHistory {
     @JoinColumn(name = "userId")
     private User user;
 
-    @OneToMany
-    @JoinColumn(name = "ticketId")
-    private List<Ticket> ticket;
+    @OneToMany(mappedBy = "paymentHistory")
+    private List<Ticket> tickets;
 
     public Long getPaymentId() {
         return paymentId;
@@ -80,10 +79,10 @@ public class PaymentHistory {
     }
 
     public List<Ticket> getTicket() {
-        return ticket;
+        return tickets;
     }
 
     public void setTicket(List<Ticket> ticket) {
-        this.ticket = ticket;
+        this.tickets = ticket;
     }
 }
