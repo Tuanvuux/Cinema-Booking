@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table
+@Table(name = "paymentHistory")
 public class PaymentHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -78,6 +78,7 @@ public class PaymentHistory {
         this.user = user;
     }
 
+
     public List<Ticket> getTicket() {
         return tickets;
     }
@@ -85,4 +86,5 @@ public class PaymentHistory {
     public void setTicket(List<Ticket> ticket) {
         this.tickets = ticket;
     }
+
 }
