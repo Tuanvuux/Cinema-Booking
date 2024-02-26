@@ -3,7 +3,7 @@ package com.mycompany.spring_mvc_project_final.entities;
 import javax.persistence.*;
 
 @Entity
-@Table
+@Table(name = "movieShowtime")
 public class MovieShowtime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

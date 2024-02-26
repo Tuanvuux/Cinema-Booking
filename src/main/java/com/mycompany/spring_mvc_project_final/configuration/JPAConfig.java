@@ -32,7 +32,7 @@ public class JPAConfig {
         dataSource.setDriverClassName("com.mysql.jdbc.Driver");
         dataSource.setUrl("jdbc:mysql://127.0.0.1:3306/CBDB?characterEncoding=UTF-8&createDatabaseIfNotExist=true");
         dataSource.setUsername("root");
-        dataSource.setPassword("123456789");
+        dataSource.setPassword("12345678");
 
         return dataSource;
     }
@@ -54,7 +54,7 @@ public class JPAConfig {
 
     final Properties additionalProperties() {
         final Properties hibernateProperties = new Properties();
-        hibernateProperties.setProperty("hibernate.hbm2ddl.auto", "update"); //update
+        hibernateProperties.setProperty("hibernate.hbm2ddl.auto", "create"); //update
         hibernateProperties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5InnoDBDialect");
         hibernateProperties.setProperty("hibernate.show_sql", "true");
         hibernateProperties.setProperty("hibernate.format_sql", "true");

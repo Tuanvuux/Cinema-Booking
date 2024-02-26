@@ -1,17 +1,18 @@
 package com.mycompany.spring_mvc_project_final.entities;
 
-import sun.security.krb5.internal.Ticket;
+
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table
+@Table(name = "user")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int userId;
+    private Long userId;
 
     @Column
     private String firstName;
@@ -46,14 +47,14 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<PaymentHistory> paymentHistory;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<Ticket> ticket;
 
-    public int getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
