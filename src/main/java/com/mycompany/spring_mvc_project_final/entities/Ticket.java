@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table
+@Table(name = "ticket")
 public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,7 +42,8 @@ public class Ticket {
     @JoinColumn(name = "showTimeId")
     private ShowTime showTime;
 
-    @OneToOne(mappedBy = "ticket")
+    @ManyToOne
+    @JoinColumn(name = "paymentId") // điều chỉnh tên cột dựa trên schema của bạn
     private PaymentHistory paymentHistory;
 
     public Long getTicketId() {

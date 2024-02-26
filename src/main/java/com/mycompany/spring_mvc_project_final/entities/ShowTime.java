@@ -8,7 +8,7 @@ import java.util.List;
 
 
 @Entity
-@Table
+@Table(name = "showTime")
 public class ShowTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

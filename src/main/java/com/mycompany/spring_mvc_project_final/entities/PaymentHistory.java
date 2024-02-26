@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table
+@Table(name = "paymentHistory")
 public class PaymentHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,9 +27,8 @@ public class PaymentHistory {
     @JoinColumn(name = "userId")
     private User user;
 
-    @OneToMany
-    @JoinColumn(name = "ticketId")
-    private List<Ticket> ticket;
+    @OneToMany(mappedBy = "paymentHistory")
+    private List<Ticket> tickets;
 
     public Long getPaymentId() {
         return paymentId;
@@ -79,11 +78,5 @@ public class PaymentHistory {
         this.user = user;
     }
 
-    public List<Ticket> getTicket() {
-        return ticket;
-    }
 
-    public void setTicket(List<Ticket> ticket) {
-        this.ticket = ticket;
-    }
 }
