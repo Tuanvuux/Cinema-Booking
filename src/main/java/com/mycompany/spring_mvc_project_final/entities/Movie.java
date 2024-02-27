@@ -18,10 +18,6 @@ public class Movie {
 
 
     @Column
-    private String movie;
-
-
-    @Column
     private String photo;
 
 
@@ -30,7 +26,7 @@ public class Movie {
 
 
     @Column
-    private String describe;
+    private String describeMovie;
 
 
     @Column
@@ -82,14 +78,6 @@ public class Movie {
     }
 
 
-    public String getMovie() {
-        return movie;
-    }
-
-
-    public void setMovie(String movie) {
-        this.movie = movie;
-    }
 
 
     public String getPhoto() {
@@ -112,15 +100,13 @@ public class Movie {
     }
 
 
-    public String getDescribe() {
-        return describe;
+    public String getDescribeMovie() {
+        return describeMovie;
     }
 
-
-    public void setDescribe(String describe) {
-        this.describe = describe;
+    public void setDescribeMovie(String describeMovie) {
+        this.describeMovie = describeMovie;
     }
-
 
     public String getProducer() {
         return producer;
@@ -175,7 +161,6 @@ public class Movie {
     public List<Ticket> getTicket() {
         return ticket;
     }
-
 
     public void setTicket(List<Ticket> ticket) {
         this.ticket = ticket;
