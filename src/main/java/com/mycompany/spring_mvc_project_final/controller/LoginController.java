@@ -113,9 +113,9 @@ public class LoginController {
         return "student/index";
     }
 
-    @RequestMapping(value = {"/", "/home"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/home"}, method = RequestMethod.GET)
     public String welcomePage(Model model) {
-        return "home";
+        return "redirect:/movie";
     }
 
     @RequestMapping(value = {"/test2"}, method = RequestMethod.GET)
