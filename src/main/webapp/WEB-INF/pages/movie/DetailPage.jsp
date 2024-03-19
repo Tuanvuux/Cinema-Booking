@@ -15,15 +15,19 @@
 </head>
 <body>
     <h1>Movie Details</h1>
-        <h2>Tên phim : ${movie.movieName}</h2>
-                    <p>Quốc gia: ${movie.nation}</p>
-                    <p>Thể loại: ${movie.category.cateName}</p>
-                    <p>Thời lượng: ${movie.timeSlot}</p>
-                    <p>Đạo diễn: ${movie.director}</p>
-                    <p>Nhà sản xuất: ${movie.producer}</p>
-                    <p>Diễn viên: ${movie.actor}</p>
-                    <p>Trailer: ${movie.trailer}</p>
-                    <p>Mô tả: ${movie.describeMovie}</p>
+        <c:if var test="${not empty movie}">
+            <h2>Tên phim : ${movie.title}</h2>
+            <p>Mô tả: ${movie.description}</p>
+            <p>Đạo diễn: ${movie.director}</p>
+            <p>Nhà sản xuất: ${movie.producer}</p>
+            <p>Diễn viên: ${movie.actor}</p>
+            <p>Quốc gia: ${movie.nation}</p>
+            <p>Trailer: ${movie.trailer}</p>
+            <p>Thể loại: ${Category.category}</p>
+        </c:if>
+        <c:if test="${empty movie}">
+            <p>Movie not found!</p>
+        </c:if>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>
 </html>

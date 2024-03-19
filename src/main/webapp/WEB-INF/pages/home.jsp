@@ -72,7 +72,7 @@
                                            <img src="${movie.photo}" class="card-img-top" alt="...">
                                            <div class="card-body">
                                                <h5 class="card-title">${movie.movieName}</h5>
-                                               <a href="/movie/${movie.movieId}" class="btn btn-primary">Detail</a>
+                                               <a href="/movie/detail?id=${movie.movieId}" class="btn btn-primary">Detail</a>
                                                <a href="" class="btn btn-primary" style="background-color: #ffb6c1;">Đặt vé</a>
                                            </div>
                                        </div>
