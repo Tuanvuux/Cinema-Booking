@@ -19,11 +19,6 @@
             <div class="col"></div>
             <div class="col-10">
                 <a href="/admin/addMovie" class="btn btn-primary">Add Movie</a>
-                <h3 class="mt-4">Danh sách phim</h3>
-                <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-3">
-                    <button class="btn btn-primary" id="ajaxButton">Detail</button>
-                </div>
-                <div id="result" class="mb-4"> llll</div>
 
                 <div class="row row-cols-1 row-cols-md-3 g-4">
                     <c:forEach var="movie" items="${movieList}">
@@ -32,9 +27,9 @@
                                 <img src="${movie.photo}" class="card-img-top" alt="...">
                                 <div class="card-body">
                                     <h5 class="card-title">${movie.movieName}</h5>
-                                    <a href="/movieDetail" class="btn btn-primary">Detail</a>
-                                    <a href="/admin/editMovie?movieId=${movie.movieId}" class="btn btn-success">Edit</a>
-                                    <a href="/admin/deleteMovie?movieId=${movie.movieId}" class="btn btn-danger">Delete</a>
+                                    <a href="/movie/detail?id=${movie.movieId}" class="btn btn-primary">Detail</a>
+                                    <a href="/admin/editMovie?id=${movie.movieId}" class="btn btn-success">Edit</a>
+                                     <a href="/admin/deleteMovie?movieId=${movie.movieId}" class="btn btn-danger">Delete</a>
                                 </div>
                             </div>
                         </div>

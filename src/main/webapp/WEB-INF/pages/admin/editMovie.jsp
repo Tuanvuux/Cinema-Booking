@@ -15,36 +15,36 @@
         <h1>Edit Movie</h1>
         <form:form action="/admin/updateMovie" method="post" modelAttribute="movie">
             <div class="mb-3">
-                <label for="movieName" class="form-label">Movie Name</label>
-                <form:input path="movieName" id="movieName" class="form-control"/>
-            </div>
-            <div class="mb-3">
-                <label for="nation" class="form-label">Nation</label>
-                <form:input path="nation" id="nation" class="form-control"/>
-            </div>
-            <div class="mb-3">
-                <label for="director" class="form-label">Director</label>
-                <form:input path="director" id="director" class="form-control"/>
-            </div>
-            <div class="mb-3">
-                <label for="producer" class="form-label">Producer</label>
-                <form:input path="producer" id="producer" class="form-control"/>
-            </div>
-            <div class="mb-3">
-                <label for="actor" class="form-label">Actor</label>
-                <form:input path="actor" id="actor" class="form-control"/>
-            </div>
-            <div class="mb-3">
-                <label for="trailer" class="form-label">Trailer</label>
-                <form:input path="trailer" id="trailer" class="form-control"/>
-            </div>
-            <div class="mb-3">
-                <label for="describeMovie" class="form-label">Describe Movie</label>
-                <form:textarea path="describeMovie" id="describeMovie" class="form-control"/>
-            </div>
-            <input type="hidden" name="movieId" value="${movie.movieId}"> <!-- To include movieId for updating -->
+                            <label for="movieName" class="form-label">Movie Name</label>
+                            <form:input path="movieName" id="movieName" class="form-control"/>
+                        </div>
+                        <div class="mb-3">
+                            <label for="nation" class="form-label">Nation</label>
+                            <form:input path="nation" id="nation" class="form-control"/>
+                        </div>
+                        <div class="mb-3">
+                            <label for="director" class="form-label">Director</label>
+                            <form:input path="director" id="director" class="form-control"/>
+                        </div>
+                        <div class="mb-3">
+                            <label for="producer" class="form-label">Producer</label>
+                            <form:input path="producer" id="producer" class="form-control"/>
+                        </div>
+                        <div class="mb-3">
+                            <label for="actor" class="form-label">Actor</label>
+                            <form:input path="actor" id="actor" class="form-control"/>
+                        </div>
+                        <div class="mb-3">
+                            <label for="trailer" class="form-label">Trailer</label>
+                            <form:input path="trailer" id="trailer" class="form-control"/>
+                        </div>
+                        <div class="mb-3">
+                            <label for="describeMovie" class="form-label">Describe Movie</label>
+                            <form:textarea path="describeMovie" id="describeMovie" class="form-control"/>
+                        </div>
             <button type="submit" class="btn btn-primary">Save Changes</button>
         </form:form>
     </div>
 </body>
 </html>
+

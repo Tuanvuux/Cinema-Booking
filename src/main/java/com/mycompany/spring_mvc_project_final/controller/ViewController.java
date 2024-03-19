@@ -24,6 +24,13 @@ public class ViewController {
         return "movie/MovieList";
     }
 
+    @RequestMapping(value = "/detail",method = GET)
+    public String detailMovie(@RequestParam("id") Long movieId, Model model){
+        Movie movie = movieRepository.findById(movieId).orElse(null);
+        model.addAttribute("movie", movie);
+        return "movie/MovieDetails";
+    }
+
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public String search(
         @RequestParam("searchInput") String searchInput, Model model) {
@@ -37,14 +44,5 @@ public class ViewController {
         return "movie/MovieList";
     }
 
-    @GetMapping("/movieDetail")
-    public String getMovieDetail(@RequestParam("movieId") Long movieId, Model model) {
-        Movie movie = movieRepository.findById(movieId).orElse(null);
-        if (movie == null) {
-            return "error";
-        }
-        System.out.println(movie.getMovieName()+"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-        model.addAttribute("movie", movie);
-        return "MovieDetail";
-    }
+
 }
