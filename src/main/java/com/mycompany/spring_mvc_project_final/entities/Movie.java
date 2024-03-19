@@ -2,6 +2,7 @@ package com.mycompany.spring_mvc_project_final.entities;
 
 
 import javax.persistence.*;
+import java.sql.Time;
 import java.util.List;
 
 
@@ -28,11 +29,29 @@ public class Movie {
     @Column
     private String describeMovie;
 
+    public String getDirector() {
+        return director;
+    }
 
+    public void setDirector(String director) {
+        this.director = director;
+    }
+
+    @Column
+    private String director;
     @Column
     private String producer;
 
+    public Time getTimeSlot() {
+        return timeSlot;
+    }
 
+    public void setTimeSlot(Time timeSlot) {
+        this.timeSlot = timeSlot;
+    }
+
+    @Column
+    private Time timeSlot;
     @Column
     private String actor;
 
@@ -62,21 +81,17 @@ public class Movie {
         return movieId;
     }
 
-
     public void setMovieId(Long movieId) {
         this.movieId = movieId;
     }
-
 
     public String getMovieName() {
         return movieName;
     }
 
-
     public void setMovieName(String movieName) {
         this.movieName = movieName;
     }
-
 
     public byte[] getPhoto() {
         return photo;
@@ -90,11 +105,9 @@ public class Movie {
         return nation;
     }
 
-
     public void setNation(String nation) {
         this.nation = nation;
     }
-
 
     public String getDescribeMovie() {
         return describeMovie;
@@ -108,51 +121,41 @@ public class Movie {
         return producer;
     }
 
-
     public void setProducer(String producer) {
         this.producer = producer;
     }
-
 
     public String getActor() {
         return actor;
     }
 
-
     public void setActor(String actor) {
         this.actor = actor;
     }
-
 
     public String getTrailer() {
         return trailer;
     }
 
-
     public void setTrailer(String trailer) {
         this.trailer = trailer;
     }
-
 
     public Category getCategory() {
         return category;
     }
 
-
     public void setCategory(Category category) {
         this.category = category;
     }
-
 
     public List<Post> getPost() {
         return post;
     }
 
-
     public void setPost(List<Post> post) {
         this.post = post;
     }
-
 
     public List<Ticket> getTicket() {
         return ticket;
@@ -162,11 +165,9 @@ public class Movie {
         this.ticket = ticket;
     }
 
-
     public List<MovieShowtime> getMovieShowtime() {
         return movieShowtime;
     }
-
 
     public void setMovieShowtime(List<MovieShowtime> movieShowtime) {
         this.movieShowtime = movieShowtime;
