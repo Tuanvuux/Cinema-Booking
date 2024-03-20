@@ -13,15 +13,26 @@
 <body>
     <div class="container">
         <h1>Add Movie</h1>
-        <form:form action="/admin/saveMovie" method="post" modelAttribute="movie">
+        <form:form action="/admin/saveMovie" method="post" modelAttribute="movie"  enctype="multipart/form-data">
             <div class="mb-3">
                 <label for="movieName" class="form-label">Movie Name</label>
                 <form:input path="movieName" id="movieName" class="form-control"/>
             </div>
             <div class="mb-3">
+                <label for="photo" class="form-label">Photo</label>
+                <input type="file" name="image" class="form-control">
+            </div>
+            <div class="mb-3">
                 <label for="nation" class="form-label">Nation</label>
                 <form:input path="nation" id="nation" class="form-control"/>
             </div>
+            <div class="form-group">
+                                        <label class="control-label">Category (*)</label>
+                                        <form:select path="category.categoryId"  class="form-control" >
+                                            <form:option value="0" label="---Select---" />
+                                            <form:options items="${categoryList}" />
+                                        </form:select>
+                                    </div>
             <div class="mb-3">
                 <label for="director" class="form-label">Director</label>
                 <form:input path="director" id="director" class="form-control"/>
