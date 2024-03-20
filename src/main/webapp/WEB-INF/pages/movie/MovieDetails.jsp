@@ -16,6 +16,7 @@
 <body>
     <h1>Movie Details</h1>
         <h2>Tên phim : ${movie.movieName}</h2>
+        <img width="100" height="100" src="movie/getPhoto/<c:out value='${movie.movieId}'/>">
                     <p>Quốc gia: ${movie.nation}</p>
                     <p>Thể loại: ${movie.category.cateName}</p>
                     <p>Thời lượng: ${movie.timeSlot}</p>

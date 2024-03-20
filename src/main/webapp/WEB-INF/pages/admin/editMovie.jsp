@@ -13,10 +13,15 @@
 <body>
     <div class="container">
         <h1>Edit Movie</h1>
-        <form:form action="/admin/updateMovie" method="post" modelAttribute="movie">
+        <form:form action="/admin/updateMovie" method="post" modelAttribute="movie" enctype="multipart/form-data">
+        <form:hidden path="movieId"/>
             <div class="mb-3">
                             <label for="movieName" class="form-label">Movie Name</label>
                             <form:input path="movieName" id="movieName" class="form-control"/>
+                        </div>
+                        <div class="mb-3">
+                             <label for="photo" class="form-label">Photo</label>
+                             <input path="photo" type="file" name="image" class="form-control">
                         </div>
                         <div class="mb-3">
                             <label for="nation" class="form-label">Nation</label>

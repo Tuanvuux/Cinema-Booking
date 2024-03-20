@@ -24,12 +24,12 @@
                     <c:forEach var="movie" items="${movieList}">
                         <div class="col">
                             <div class="card h-100">
-                                <img src="${movie.photo}" class="card-img-top" alt="...">
+                                <img width="100" height="100" src="movie/getPhoto/<c:out value='${movie.movieId}'/>">
                                 <div class="card-body">
                                     <h5 class="card-title">${movie.movieName}</h5>
                                     <a href="/movie/detail?id=${movie.movieId}" class="btn btn-primary">Detail</a>
                                     <a href="/admin/editMovie?id=${movie.movieId}" class="btn btn-success">Edit</a>
-                                     <a href="/admin/deleteMovie?movieId=${movie.movieId}" class="btn btn-danger">Delete</a>
+                                     <a href="/admin/deleteMovie?id=${movie.movieId}" class="btn btn-danger">Delete</a>
                                 </div>
                             </div>
                         </div>
