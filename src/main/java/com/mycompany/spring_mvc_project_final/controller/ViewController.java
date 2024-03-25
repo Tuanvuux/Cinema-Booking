@@ -4,13 +4,18 @@ import com.mycompany.spring_mvc_project_final.entities.Movie;
 import com.mycompany.spring_mvc_project_final.repository.MovieRepository;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.List;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -40,7 +45,6 @@ public class ViewController {
         model.addAttribute("movieList", movieList);
         return "movie/MovieList";
     }
-
     @RequestMapping(value = "/detail",method = GET)
     public String detailMovie(@RequestParam("id") Long movieId, Model model){
         Movie movie = movieRepository.findById(movieId).orElse(null);
