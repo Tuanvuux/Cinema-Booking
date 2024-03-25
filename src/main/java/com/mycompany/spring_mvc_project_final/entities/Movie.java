@@ -18,7 +18,8 @@ public class Movie {
 
 
     @Column
-    private String photo;
+    @Lob
+    private byte[] photo;
 
 
     @Column
@@ -78,17 +79,13 @@ public class Movie {
     }
 
 
-
-
-    public String getPhoto() {
+    public byte[] getPhoto() {
         return photo;
     }
 
-
-    public void setPhoto(String photo) {
+    public void setPhoto(byte[] photo) {
         this.photo = photo;
     }
-
 
     public String getNation() {
         return nation;
