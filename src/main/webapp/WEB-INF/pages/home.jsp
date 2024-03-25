@@ -1,92 +1,100 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page contentType="text/html" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="description" content="Male_Fashion Template">
-        <meta name="keywords" content="Male_Fashion, unica, creative, html">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Home Page</title>
-        <jsp:include page="include/css-page.jsp"/>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Male_Fashion Template">
+    <meta name="keywords" content="Male_Fashion, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Home Page</title>
+    <jsp:include page="include/css-page.jsp" />
     <style>
-        body{
-            background: gray;
+
+        .btn {
+            border: 1px solid white;
+            border-radius: 5px;
+            text-decoration: none;
+            color: white;
+            padding: 2px;
+            height: 27px;
         }
-        .nav{
-            width: 100%;
-            color: red;
-            padding-top: 50px;
+
+        .btn:hover {
+            background-color: #8d0000;
+            border: 1px solid #ba1911;
+            color: white;
+        }
+
+        .movie {
+            width: fit-content;
+            margin: 10px;
+            border-radius: 10px;
+            height: 320px;
+        }
+
+        .button {
+            padding-bottom: 10px;
+            border-radius: 1px solid gray;
+            width: 220px;
+        }
+
+        .long-text {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
     </style>
 
-    </head>
+</head>
 
-    <body>
-       <jsp:include page="include/header.jsp"/>
-       <div class="container" style="display: flex; width: 100%;  font-weight: bold; color: white; background-color:  black;">
-               <div style="width: 10%;">
+<body style="background-color: #f2f5fb">
+    <jsp:include page="include/header.jsp" />
+    <jsp:include page="include/header2.jsp" />
 
-               </div>
-               <div style=" display:flex;  height: 50px; width: 80%; padding-top: 10px; margin-top: 50px;">
-                   <div style="width: 60%;">
-                       <ul  style="display: flex;">
-                           <li style=" list-style: none;">
-                               <a href="/movie" style="list-style-type: none; margin-right: 100px; text-decoration: none;">
-                                   Phim
-                               </a>
-                           </li>
-                           <li style=" list-style: none;">
-                               <a href=""  style="list-style-type: none;  text-decoration: none;">
-                                   Lịch chiếu
-                               </a>
-                           </li>
-                       </ul>
-                  </div>
+    <div class="film" style=" display: flex;flex-wrap: wrap;">
+        <div style="width: 10%;"></div>
+        <div class="main-home" style="width: 80%; margin-left: 100px;">
+            <div style="margin: 0 auto;">
+                <div style="display: flex; flex-wrap: wrap;">
+                    <c:forEach var="movie" items="${movieList}">
+                        <div class="movie"
+                            style="display: flex;flex-direction: column; border: 1px solid gray; background-color: black; align-items: center;">
+                            <img src="movie/getPhoto/<c:out value='${movie.movieId}'/>"
+                                style=" width:220px; height: 250px; border-radius: 10px 10px 0px 0px;">
+                            <div class="movie-inf" style=" width:220px;">
+                                <center>
+                                    <h5 class="card-title long-text" style="color: white; font-weight: bold;">
+                                        ${movie.movieName}
+                                    </h5>
+                                </center>
+                                <div class="button"
+                                    style="display: flex;flex-wrap: nowrap;justify-content: space-evenly; height: 25px;">
+                                    <a href="/movie/detail?id=${movie.movieId}" class="btn">Chi tiết</a>
+                                    <a href="" class="btn">Đặt vé</a>
+                                </div>
+                            </div>
+                        </div>
+                    </c:forEach>
+                    <c:if test="${empty movieList}">
+                        <div class="alert alert-warning mt-4" role="alert">Không có dữ liệu (No data)</div>
+                    </c:if>
+                </div>
+            </div>
+        </div>
+        <div style="width: 10%;"></div>
+    </div>
 
-                  <form:form action="/movie/search" method="post">
-                        <input name="searchInput" type="text"  placeholder="Tìm kiếm" >
-                        <button type="submit">Search</button>
-                      </div>
-                  </form:form>
-               </div>
-               <div style="width: 10%;">
 
-               </div>
-           </div>
-           <div class="container">
-                   <a href="/admin/addMovie" class="btn btn-primary">Add Movie</a>
 
-                   <div class="row">
-                       <div class="col"></div>
-                       <div class="col-10">
-                           <h3 class="mt-4">Danh sách phim</h3>
+    <jsp:include page="include/footer.jsp" />
 
-                           <div class="row row-cols-1 row-cols-md-3 g-4">
-                               <c:forEach var="movie" items="${movieList}">
-                                   <div class="col">
-                                       <div class="card h-100">
-                                           <img width="100" height="100" src="movie/getPhoto/<c:out value='${movie.movieId}'/>">
-                                           <div class="card-body">
-                                               <h5 class="card-title">${movie.movieName}</h5>
-                                               <a href="/movie/detail?id=${movie.movieId}" class="btn btn-primary">Detail</a>
-                                               <a href="" class="btn btn-primary" style="background-color: #ffb6c1;">Đặt vé</a>
-                                           </div>
-                                       </div>
-                                   </div>
-                               </c:forEach>
-                           </div>
 
-                           <c:if test="${empty movieList}">
-                               <div class="alert alert-warning mt-4" role="alert">There is no data</div>
-                           </c:if>
-                       </div>
-                       <div class="col"></div>
-                   </div>
-               </div>
-    </body>
+
+</body>
 
 </html>

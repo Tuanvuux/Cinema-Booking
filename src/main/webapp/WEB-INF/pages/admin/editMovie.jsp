@@ -1,55 +1,206 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
     <meta charset="UTF-8">
-    <title>Edit Movie</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <meta name="description" content="Male_Fashion Template">
+    <meta name="keywords" content="Male_Fashion, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Danh sách phim</title>
+    <style>
+        .btn {
+            border: 1px solid #031d2c;
+            border-radius: 10px;
+            text-decoration: none;
+            color: #031d2c;
+            padding: 5px 10px 0 10px;
+            height: 27px;
+            margin-bottom: 10px;
+        }
+
+        .btn:hover {
+            background-color: #8d0000;
+            border: 1px solid #ba1911;
+            color: white;
+        }
+
+        .movie {
+            width: fit-content;
+            margin: 10px;
+            border-radius: 10px;
+            height: 320px;
+        }
+
+        .button {
+            padding-bottom: 10px;
+            border-radius: 1px solid gray;
+            width: 220px;
+        }
+
+        .long-text {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .form-control,
+        textarea,
+        select {
+            width: 80%;
+            height: 30px;
+            margin: 5px;
+            border-radius: 10px;
+            border: none;
+            padding-left: 10px;
+        }
+
+        .form-label {
+            width: 10%;
+        }
+
+        .mb-3 {
+            display: flex;
+            align-items: center;
+        }
+    </style>
+
 </head>
-<body>
-    <div class="container">
-        <h1>Edit Movie</h1>
-        <form:form action="/admin/updateMovie" method="post" modelAttribute="movie" enctype="multipart/form-data">
-        <form:hidden path="movieId"/>
-            <div class="mb-3">
-                            <label for="movieName" class="form-label">Movie Name</label>
-                            <form:input path="movieName" id="movieName" class="form-control"/>
-                        </div>
-                        <div class="mb-3">
-                             <label for="photo" class="form-label">Photo</label>
-                             <input path="photo" type="file" name="image" class="form-control">
-                        </div>
-                        <div class="mb-3">
-                            <label for="nation" class="form-label">Nation</label>
-                            <form:input path="nation" id="nation" class="form-control"/>
-                        </div>
-                        <div class="mb-3">
-                            <label for="director" class="form-label">Director</label>
-                            <form:input path="director" id="director" class="form-control"/>
-                        </div>
-                        <div class="mb-3">
-                            <label for="producer" class="form-label">Producer</label>
-                            <form:input path="producer" id="producer" class="form-control"/>
-                        </div>
-                        <div class="mb-3">
-                            <label for="actor" class="form-label">Actor</label>
-                            <form:input path="actor" id="actor" class="form-control"/>
-                        </div>
-                        <div class="mb-3">
-                            <label for="trailer" class="form-label">Trailer</label>
-                            <form:input path="trailer" id="trailer" class="form-control"/>
-                        </div>
-                        <div class="mb-3">
-                            <label for="describeMovie" class="form-label">Describe Movie</label>
-                            <form:textarea path="describeMovie" id="describeMovie" class="form-control"/>
-                        </div>
-            <button type="submit" class="btn btn-primary">Save Changes</button>
-        </form:form>
+
+<body style="background-color: #f2f5fb">
+    <div class="navigation"
+        style="display: flex; width: 100%; height: 150px; font-weight: bold; color: white; background-color:  #031d2c; color: white">
+        <div style="width: 10%;">
+
+        </div>
+        <div
+            style=" display:flex;  height: 50px; width: 80%; padding-top: 10px; margin-top: 50px; align-items: center;">
+            <div style="width: 15%;">
+                <img src="../../resources/img/cinema/logo.png" style="width: 100px;">
+            </div>
+            <div style="width: 85%;">
+                <ul style="display: flex; justify-content: space-between; list-style: none;">
+                    <li>
+                        <a href="/" style=" margin-right: 100px; text-decoration: none; color: white;">
+                            Trang chủ
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/movie" style="list-style-type: none;  text-decoration: none; color: white;">
+                            Phim
+                        </a>
+                    </li>
+                    <li>
+                        <a href="" style="list-style-type: none;  text-decoration: none; color: white;">
+                            Lịch chiếu
+                        </a>
+                    </li>
+                    <form:form action="/movie/search" method="post">
+                        <input name="searchInput" type="text" placeholder="Tìm kiếm">
+                        <button type="submit">Search</button>
+                    </form:form>
+                </ul>
+            </div>
+        </div>
+        <div style="width: 10%;"></div>
+    </div>
+
+
+
+
+
+    <div class="film" style=" display: flex;flex-wrap: wrap; margin: 30px 0 30px 0;">
+        <div style="width: 10%;"></div>
+        <div class="main-home" style="width: 80%; margin-left: 100px;">
+            <form:form action="/admin/updateMovie" method="post" modelAttribute="movie" enctype="multipart/form-data">
+            <form:hidden path="movieId"/>
+                <div class="mb-3" style="width: 100%">
+                    <label for="movieName" class="form-label">Tên phim</label>
+                    <form:input path="movieName" id="movieName" class="form-control" />
+                </div>
+                <div class="mb-3">
+                                <label for="photo" class="form-label">Hình ảnh</label>
+                                <input type="file" name="image" class="form-control">
+                            </div>
+                <div class="mb-3">
+                    <label for="nation" class="form-label">Quốc gia</label>
+                    <form:input path="nation" id="nation" class="form-control" />
+                </div>
+                <div class="mb-3">
+                    <label for="timeSlot" class="form-label">Thời lượng</label>
+                    <form:input path="timeSlot" id="timeSlot" class="form-control" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" style="">Thể loại (*)</label>
+                    <form:select path="category.categoryId">
+                        <form:option value="0" label="---Select---" />
+                        <form:options items="${categoryList}" />
+                    </form:select>
+                </div>
+                <div class="mb-3">
+                    <label for="director" class="form-label">Đạo diễn</label>
+                    <form:input path="director" id="director" class="form-control" />
+                </div>
+                <div class="mb-3">
+                    <label for="producer" class="form-label">Nhà sản xuất</label>
+                    <form:input path="producer" id="producer" class="form-control" />
+                </div>
+                <div class="mb-3">
+                    <label for="actor" class="form-label">Diễn viên</label>
+                    <form:input path="actor" id="actor" class="form-control" />
+                </div>
+                <div class="mb-3">
+                    <label for="trailer" class="form-label">Trailer</label>
+                    <form:input path="trailer" id="trailer" class="form-control" />
+                </div>
+                <div class="mb-3">
+                    <label for="describeMovie" class="form-label">Mô tả</label>
+                    <form:textarea path="describeMovie" id="describeMovie" class="form-control" style="height: 50px;" />
+                </div>
+                <button type="submit" class="btn btn-primary">LƯU</button>
+            </form:form>
+        </div>
+        <div style="width: 10%;"></div>
+    </div>
+
+
+
+
+
+
+    <div class="footer" style=" background-color: #031d2c; color: white;">
+        <div class="container" style="display: flex; flex-wrap: nowrap; justify-content: space-evenly; ">
+            <div class="col">
+                <h3 class="footer-title" style="color: white;">Về Chúng Tôi</h3>
+                <p style="color: white;">DoubleT Cinema<br>
+                    Địa chỉ: DoubleT Cinema, Tp. Đà Nẵng, Việt Nam<br>
+                    Điện thoại: 0123 456 789
+                </p>
+            </div>
+            <div class="col">
+                <h3 class="footer-title" style="color: white;">Liên Hệ</h3>
+                <p style="color: white;">
+                    <a href="https://maps.app.goo.gl/uM7ecGRwsK2TKSYG9" target="_blank"
+                        style="color: white;text-decoration: none;">
+                        DoubleT Cinema, Đà Nẵng
+                    </a><br>
+                    Email: doubletcinema@gmail.com<br>
+                    Website: http://doubleT-cinema.com/
+                </p>
+            </div>
+            <div class="col">
+                <a href="" style="color: white;"><img src="" alt="Facebook"></a>
+                <a href="" style="color: white;"><img src="" alt="Youtube"></a>
+            </div>
+        </div>
+        <div class="copyright">
+            <p style="color: white; ">Copyright &copy; 2024 DoubleT. All Rights Reserved.</p>
+        </div>
     </div>
 </body>
-</html>
 
+</html>

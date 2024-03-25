@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.ws.rs.GET;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -45,32 +46,13 @@ public class AdminController {
     @RequestMapping(value = "/saveMovie",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = {MediaType.APPLICATION_JSON_UTF8_VALUE, "text/plain;charset=UTF-8"})
-    public ModelAndView save(
-//                            @RequestParam("movieName") String movieName,
-//                             @RequestParam("nation") String nation,
-                             @RequestPart("image") MultipartFile image,
-//                             @RequestParam("describeMovie") String describeMovie,
-//                             @RequestParam("producer") String producer,
-//                             @RequestParam("actor") String actor,
-//                             @RequestParam("trailer") String trailer,
-                             //@RequestParam("categoryId") Long categoryId,
+    public ModelAndView save(@RequestPart("image") MultipartFile image,
                              Movie movie,
-                             Model model
-                             ) {
+                             Model model) {
         try {
-            //Movie m = new Movie();
-            // Thiết lập các thuộc tính của phim từ dữ liệu nhận được từ form
-//            m.setMovieName(movieName);
             movie.setPhoto(image.getBytes()); // Lưu dữ liệu ảnh
-//            m.setNation(nation);
-//            m.setDescribeMovie(describeMovie);
-//            m.setProducer(producer);
-//            m.setActor(actor);
-//            m.setTrailer(trailer);
             setCategoryDropDownList(model);
-           // Category category = categoryRepository.findById(movie.getCategory()).get();
-            //Category category = categoryRepository.findById(Long.parseLong(categoryId)).get();
-           // m.setCategory(movie.getCategory());
+
             movieRepository.save(movie); // Lưu thông tin phim vào cơ sở dữ liệu
 
             // Chuyển hướng người dùng đến trang hiển thị danh sách phim
@@ -103,8 +85,9 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/updateMovie", method = RequestMethod.POST)
-    public String updateMovie(@ModelAttribute Movie movie){
-        System.out.println("3333");
+    public String updateMovie(@ModelAttribute Movie movie, @RequestPart("image") MultipartFile image) throws IOException {
+//        System.out.println("3333");
+        movie.setPhoto(image.getBytes());
         movieRepository.save(movie);
         return "redirect:/";
     }
@@ -128,4 +111,6 @@ public class AdminController {
             model.addAttribute("categoryList", cateMap);
         }
     }
+
+
 }

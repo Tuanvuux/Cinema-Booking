@@ -1,49 +1,101 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
     <meta charset="UTF-8">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <title>View Movie</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <meta name="description" content="Male_Fashion Template">
+    <meta name="keywords" content="Male_Fashion, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Home Page</title>
+    <jsp:include page="../include/css-page.jsp" />
+    <style>
 
+        .btn {
+            border: 1px solid white;
+            border-radius: 5px;
+            text-decoration: none;
+            color: white;
+            padding: 2px;
+            height: 27px;
+        }
+
+        .btn:hover {
+            background-color: #8d0000;
+            border: 1px solid #ba1911;
+            color: white;
+        }
+
+        .movie {
+            width: fit-content;
+            margin: 10px;
+            border-radius: 10px;
+            height: 320px;
+        }
+
+        .button {
+            padding-bottom: 10px;
+            border-radius: 1px solid gray;
+            width: 220px;
+        }
+
+        .long-text {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    </style>
 
 </head>
-<body>
-    <div class="container">
-        <div class="row">
-            <div class="col"></div>
-            <div class="col-10">
-                <a href="/admin/addMovie" class="btn btn-primary">Add Movie</a>
 
-                <div class="row row-cols-1 row-cols-md-3 g-4">
+<body style="background-color: #f2f5fb">
+    <jsp:include page="../include/header.jsp" />
+    <jsp:include page="../include/header2.jsp" />
+
+    <div class="film" style=" display: flex;flex-wrap: wrap;">
+        <div style="width: 10%;"></div>
+        <div class="main-home" style="width: 80%; margin-left: 100px;">
+            <div style="margin: 0 auto;">
+                <div style="display: flex; flex-wrap: wrap;">
                     <c:forEach var="movie" items="${movieList}">
-                        <div class="col">
-                            <div class="card h-100">
-                                <img width="100" height="100" src="movie/getPhoto/<c:out value='${movie.movieId}'/>">
-                                <div class="card-body">
-                                    <h5 class="card-title">${movie.movieName}</h5>
-                                    <a href="/movie/detail?id=${movie.movieId}" class="btn btn-primary">Detail</a>
-                                    <a href="/admin/editMovie?id=${movie.movieId}" class="btn btn-success">Edit</a>
-                                     <a href="/admin/deleteMovie?id=${movie.movieId}" class="btn btn-danger">Delete</a>
+                        <div class="movie"
+                            style="display: flex;flex-direction: column; border: 1px solid gray; background-color: black; align-items: center;">
+                            <img src="movie/getPhoto/<c:out value='${movie.movieId}'/>"
+                                style=" width:220px; height: 250px; border-radius: 10px 10px 0px 0px;">
+                            <div class="movie-inf" style=" width:220px;">
+                                <center>
+                                    <h5 class="card-title long-text" style="color: white; font-weight: bold;">
+                                        ${movie.movieName}
+                                    </h5>
+                                </center>
+                                <div class="button"
+                                    style="display: flex;flex-wrap: nowrap;justify-content: space-evenly; height: 25px;">
+                                    <a href="/movie/detail?id=${movie.movieId}" class="btn">Chi tiết</a>
+                                    <a href="/admin/editMovie?id=${movie.movieId}" class="btn">Edit</a>
+                                    <a href="/admin/deleteMovie?id=${movie.movieId}" class="btn">Delete</a>
                                 </div>
                             </div>
                         </div>
                     </c:forEach>
+                    <c:if test="${empty movieList}">
+                        <div class="alert alert-warning mt-4" role="alert">Không có dữ liệu (No data)</div>
+                    </c:if>
                 </div>
-
-                <c:if test="${empty movieList}">
-                    <div class="alert alert-warning mt-4" role="alert">There is no data</div>
-                </c:if>
             </div>
-            <div class="col"></div>
         </div>
+        <div style="width: 10%;"></div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+
+    <jsp:include page="../include/footer.jsp" />
+
+
+
 </body>
+
 </html>

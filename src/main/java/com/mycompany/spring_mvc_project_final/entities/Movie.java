@@ -41,6 +41,8 @@ public class Movie {
     private String director;
     @Column
     private String producer;
+    @Column
+    private Time timeSlot;
 
     public Time getTimeSlot() {
         return timeSlot;
@@ -50,8 +52,7 @@ public class Movie {
         this.timeSlot = timeSlot;
     }
 
-    @Column
-    private Time timeSlot;
+
     @Column
     private String actor;
 
