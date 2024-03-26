@@ -9,5 +9,8 @@
     </head>
     <body>
         <h1>${message}</h1>
+
+        <a href="addMovie" class="btn btn-primary">Add Movie</a>
+        <a href="addLogo" class="btn btn-primary">Add Logo</a>
     </body>
 </html>

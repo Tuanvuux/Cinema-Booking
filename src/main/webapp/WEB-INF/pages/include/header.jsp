@@ -1,17 +1,17 @@
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="mvc" uri="http://www.springframework.org/tags/form" %>
-
 <%@taglib  uri="http://www.springframework.org/security/tags" prefix="sec" %>
+
+
 <!-- Google Font -->
 <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
-      rel="stylesheet">
+      rel="stylesheet" >
 <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
 
 <!-- Header Section Begin -->
 <header style="position:fixed;width:100%;z-index: 100000;" class="header">
-    <div class="header__top">
+    <div class="header__top"  style=" background-color: #031d2c;">
         <div class="container">
             <div class="row">
                 <div class="col-lg-5 col-md-7">

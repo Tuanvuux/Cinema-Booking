@@ -12,7 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Home Page</title>
-    <jsp:include page="include/css-page.jsp" />
+    <jsp:include page="../include/css-page.jsp" />
     <style>
 
         .btn {
@@ -53,8 +53,8 @@
 </head>
 
 <body style="background-color: #f2f5fb">
-    <jsp:include page="include/header.jsp" />
-    <jsp:include page="include/header2.jsp" />
+    <jsp:include page="../include/header.jsp" />
+    <jsp:include page="../include/header2.jsp" />
 
     <div class="film" style=" display: flex;flex-wrap: wrap;">
         <div style="width: 10%;"></div>
@@ -75,7 +75,8 @@
                                 <div class="button"
                                     style="display: flex;flex-wrap: nowrap;justify-content: space-evenly; height: 25px;">
                                     <a href="/movie/detail?id=${movie.movieId}" class="btn">Chi tiết</a>
-                                    <a href="" class="btn">Đặt vé</a>
+                                    <a href="/admin/editMovie?id=${movie.movieId}" class="btn">Edit</a>
+                                    <a href="/admin/deleteMovie?id=${movie.movieId}" class="btn">Delete</a>
                                 </div>
                             </div>
                         </div>
@@ -91,7 +92,7 @@
 
 
 
-    <jsp:include page="include/footer.jsp" />
+    <jsp:include page="../include/footer.jsp" />
 
 
 

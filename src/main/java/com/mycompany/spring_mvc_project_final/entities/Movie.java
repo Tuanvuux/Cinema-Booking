@@ -2,6 +2,7 @@ package com.mycompany.spring_mvc_project_final.entities;
 
 
 import javax.persistence.*;
+import java.sql.Time;
 import java.util.List;
 
 
@@ -11,7 +12,6 @@ public class Movie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long movieId;
-
 
     @Column
     private String movieName;
@@ -50,6 +50,9 @@ public class Movie {
 
     @Column
     private String trailer;
+
+    @Column
+    private Time timeSlot;
 
 
     @ManyToOne
@@ -155,6 +158,13 @@ public class Movie {
     }
 
 
+    public Time getTimeSlot() {
+        return timeSlot;
+    }
+
+    public void setTimeSlot(Time timeSlot) {
+        this.timeSlot = timeSlot;
+    }
     public List<Post> getPost() {
         return post;
     }
