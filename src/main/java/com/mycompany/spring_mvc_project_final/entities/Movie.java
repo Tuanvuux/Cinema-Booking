@@ -37,6 +37,16 @@ public class Movie {
     @Column
     private String actor;
 
+    public String getDirector() {
+        return director;
+    }
+
+    public void setDirector(String director) {
+        this.director = director;
+    }
+
+    @Column
+    private String director;
 
     @Column
     private String trailer;
