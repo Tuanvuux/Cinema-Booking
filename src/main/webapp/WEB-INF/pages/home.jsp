@@ -75,7 +75,7 @@
                                 <div class="button"
                                     style="display: flex;flex-wrap: nowrap;justify-content: space-evenly; height: 25px;">
                                     <a href="/movie/detail?id=${movie.movieId}" class="btn">Chi tiết</a>
-                                    <a href="" class="btn">Đặt vé</a>
+                                    <a href="/booking?movieId=${movie.movieId}" class="btn">Đặt vé</a>
                                 </div>
                             </div>
                         </div>

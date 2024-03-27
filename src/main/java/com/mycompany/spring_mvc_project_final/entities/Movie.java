@@ -13,11 +13,11 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long movieId;
 
-
     @Column
     private String movieName;
 
 
+    @Column
     @Lob
     private byte[] photo;
 
@@ -29,6 +29,14 @@ public class Movie {
     @Column
     private String describeMovie;
 
+
+    @Column
+    private String producer;
+
+
+    @Column
+    private String actor;
+
     public String getDirector() {
         return director;
     }
@@ -39,26 +47,12 @@ public class Movie {
 
     @Column
     private String director;
-    @Column
-    private String producer;
-    @Column
-    private Time timeSlot;
-
-    public Time getTimeSlot() {
-        return timeSlot;
-    }
-
-    public void setTimeSlot(Time timeSlot) {
-        this.timeSlot = timeSlot;
-    }
-
-
-    @Column
-    private String actor;
-
 
     @Column
     private String trailer;
+
+    @Column
+    private Time timeSlot;
 
 
     @ManyToOne
@@ -82,17 +76,21 @@ public class Movie {
         return movieId;
     }
 
+
     public void setMovieId(Long movieId) {
         this.movieId = movieId;
     }
+
 
     public String getMovieName() {
         return movieName;
     }
 
+
     public void setMovieName(String movieName) {
         this.movieName = movieName;
     }
+
 
     public byte[] getPhoto() {
         return photo;
@@ -106,9 +104,11 @@ public class Movie {
         return nation;
     }
 
+
     public void setNation(String nation) {
         this.nation = nation;
     }
+
 
     public String getDescribeMovie() {
         return describeMovie;
@@ -122,41 +122,58 @@ public class Movie {
         return producer;
     }
 
+
     public void setProducer(String producer) {
         this.producer = producer;
     }
+
 
     public String getActor() {
         return actor;
     }
 
+
     public void setActor(String actor) {
         this.actor = actor;
     }
+
 
     public String getTrailer() {
         return trailer;
     }
 
+
     public void setTrailer(String trailer) {
         this.trailer = trailer;
     }
+
 
     public Category getCategory() {
         return category;
     }
 
+
     public void setCategory(Category category) {
         this.category = category;
     }
 
+
+    public Time getTimeSlot() {
+        return timeSlot;
+    }
+
+    public void setTimeSlot(Time timeSlot) {
+        this.timeSlot = timeSlot;
+    }
     public List<Post> getPost() {
         return post;
     }
 
+
     public void setPost(List<Post> post) {
         this.post = post;
     }
+
 
     public List<Ticket> getTicket() {
         return ticket;
@@ -166,9 +183,11 @@ public class Movie {
         this.ticket = ticket;
     }
 
+
     public List<MovieShowtime> getMovieShowtime() {
         return movieShowtime;
     }
+
 
     public void setMovieShowtime(List<MovieShowtime> movieShowtime) {
         this.movieShowtime = movieShowtime;

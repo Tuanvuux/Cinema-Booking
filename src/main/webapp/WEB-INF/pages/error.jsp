@@ -38,7 +38,7 @@
         <!--//mian-content-->
         <!-- copyright -->
         <!-- <div class="copyright-w3-agile">
-                <p> ©  All rights reserved | Design by <a href="#" target="_blank">aaa</a></p>
+                <p> ©  All rights reserved | Design by <a href="#" target="_blank">Huynh Phi Han</a></p>
         </div> -->
         <!-- //copyright --> 
 
