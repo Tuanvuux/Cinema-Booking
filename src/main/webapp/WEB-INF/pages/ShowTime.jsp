@@ -32,7 +32,6 @@
 <body>
 
     <h2>Chọn ngày chiếu</h2>
-    <h1>Phim ${movieId}</h1>
     <table>
         <thead>
             <tr>
@@ -53,24 +52,19 @@
             </tr>
         </tbody>
     </table>
-    <table>
-        <thead>
-            <tr>
-                <th>Movie ID</th>
-                <th>MovieName</th>
-            </tr>
-        </thead>
-        <tbody id="showtimeTableBody">
-            <c:forEach var="movie" items="${movies}" varStatus="loop">
-                <td>
-                    {movie.movieId}
-                </td>
-                <td>
-                   {movie.movieName}
-                </td>
-            </c:forEach>
-        </tbody>
-    </table>
+ <table>
+     <thead>
+         <tr>
+             <th>Movie ID</th>
+             <th>Movie Name</th>
+             <!-- Add more headers as needed -->
+         </tr>
+     </thead>
+     <tbody id="showtimeTableBody">
+         <!-- Movie data will be inserted here -->
+     </tbody>
+ </table>
+
 
 
     <script>
@@ -100,10 +94,14 @@
             xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
             xhr.onload = function() {
                 if (xhr.status === 200) {
-                    console.log('Đã gửi ngày được chọn đến controller');
-                    console.log(xhr.responseText);
-                    // Cập nhật nội dung trang dựa trên phản hồi từ controller
-                    updateShowTimeTable(JSON.parse(xhr.responseText));
+                   console.log('Đã gửi ngày được chọn đến controller');
+                                  console.log(xhr.responseText);
+
+                                  // Parse JSON response
+                                  const movies = JSON.parse(xhr.responseText);
+
+                                  // Update HTML content with movie data
+                                  updateMovieTable(movies);
                 } else {
                     console.error('Đã xảy ra lỗi khi gửi dữ liệu đến controller');
                 }
@@ -112,23 +110,22 @@
             xhr.send(JSON.stringify({ selectedDate: selectedDate }));
         }
 
-        function updateShowTimeTable(showTimes) {
-            const showtimeTableBody = document.getElementById('showtimeTableBody');
-            showtimeTableBody.innerHTML = ''; // Xóa nội dung cũ
 
-            // Thêm dữ liệu mới
-            showTimes.forEach(showTime => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${showTime.showTimeId}</td>
-                    <td>${showTime.showDate}</td>
-                    <td>${showTime.timeStart}</td>
-                    <td>${showTime.time
-                    .timeEnd}</td>
-                `;
-                showtimeTableBody.appendChild(row);
-            });
-        }
+ function updateMovieTable(movies) {
+        const showtimeTableBody = document.getElementById('showtimeTableBody');
+        showtimeTableBody.innerHTML = ''; // Clear existing content
+
+        // Add new movie data
+        movies.forEach(function(movie) {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${movie.movieId}</td>
+                <td>${movie.movieName}</td>
+                <!-- Add more columns as needed -->
+            `;
+            showtimeTableBody.appendChild(row);
+        });
+    }
     </script>
 
     <script>

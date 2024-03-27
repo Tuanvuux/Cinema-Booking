@@ -53,25 +53,13 @@
             </tr>
         </tbody>
     </table>
-    <table>
-        <thead>
-            <tr>
-                <th>Room ID</th>
-                <th>ShowTimes</th>
-                <!-- Thêm các cột khác tùy thuộc vào thông tin bạn muốn hiển thị -->
-            </tr>
-        </thead>
-        <tbody id="showtimeTableBody">
-            <!-- Dùng forEach để lặp qua danh sách RoomShowtime và hiển thị thông tin của mỗi RoomShowtime -->
+    <h2>Chọn lịch chiếu</h2>
+
             <c:forEach var="roomShowtime" items="${roomShowtimes}">
-                <tr>
-                    <td>${roomShowtime.roomId}</td>
-                    <td>${roomShowtime.showTimeId}</td>
-                    <!-- Thêm các cột khác tùy thuộc vào thông tin bạn muốn hiển thị -->
-                </tr>
+                    ${roomShowtime.roomId}
+                    ${roomShowtime.showTimeId}
             </c:forEach>
-        </tbody>
-    </table>
+
 
     <script>
         // Lấy tất cả các nút

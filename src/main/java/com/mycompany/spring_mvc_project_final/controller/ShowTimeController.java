@@ -1,11 +1,15 @@
 package com.mycompany.spring_mvc_project_final.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mycompany.spring_mvc_project_final.entities.Movie;
 import com.mycompany.spring_mvc_project_final.entities.ShowTime;
 import com.mycompany.spring_mvc_project_final.repository.MovieRepository;
 import com.mycompany.spring_mvc_project_final.repository.ShowTimeRepository;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -51,38 +55,30 @@ public class ShowTimeController {
     }
     @Transactional
     @PostMapping("/processSelectedDate")
-    @ResponseBody
-    public String processSelectedDate(@RequestBody Map<String, String> payload, Model model) {
-        String selectedDateStr = payload.get("selectedDate");
+    public ResponseEntity<String> processSelectedDate(@RequestBody Map<String, String> payload) {
         SimpleDateFormat inputFormat = new SimpleDateFormat("dd MM yyyy");
         SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
 
         try {
-            // Parse the input date string
+            String selectedDateStr = payload.get("selectedDate");
             Date date = inputFormat.parse(selectedDateStr);
-
-            // Format the parsed date to the desired output format
             String outputDate = outputFormat.format(date);
-            System.out.println("checkdate"+outputDate);
 
-            // Print the output
-            String showDate = outputDate.toString();
-            List<Movie> movies= movieRepository.findMovie(showDate);
-            System.out.println(movies.isEmpty());
-            System.out.println(movies.size());
-            if(!movies.isEmpty()){
-                for(Movie movie: movies){
+            List<Movie> movies = movieRepository.findMovie(outputDate);
+
+            if (!movies.isEmpty()) {
+                for (Movie movie : movies) {
                     Hibernate.initialize(movie.getPost());
                 }
             }
 
-            //System.out.println(showTimes.size());
-            model.addAttribute("movies", movies);
-        } catch (ParseException e) {
+            ObjectMapper objectMapper = new ObjectMapper();
+            String jsonMovies = objectMapper.writeValueAsString(movies);
+            return ResponseEntity.ok(jsonMovies);
+        } catch (ParseException | JsonProcessingException e) {
             e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing selected date");
         }
-
-        return "ShowTime";
     }
 
 }
