@@ -56,22 +56,22 @@
     <table>
         <thead>
             <tr>
-                <th>Movie ID</th>
-                <th>MovieName</th>
+                <th>Room ID</th>
+                <th>ShowTimes</th>
+                <!-- Thêm các cột khác tùy thuộc vào thông tin bạn muốn hiển thị -->
             </tr>
         </thead>
         <tbody id="showtimeTableBody">
-            <c:forEach var="movie" items="${movies}" varStatus="loop">
-                <td>
-                    {movie.movieId}
-                </td>
-                <td>
-                   {movie.movieName}
-                </td>
+            <!-- Dùng forEach để lặp qua danh sách RoomShowtime và hiển thị thông tin của mỗi RoomShowtime -->
+            <c:forEach var="roomShowtime" items="${roomShowtimes}">
+                <tr>
+                    <td>${roomShowtime.roomId}</td>
+                    <td>${roomShowtime.showTimeId}</td>
+                    <!-- Thêm các cột khác tùy thuộc vào thông tin bạn muốn hiển thị -->
+                </tr>
             </c:forEach>
         </tbody>
     </table>
-
 
     <script>
         // Lấy tất cả các nút
@@ -96,7 +96,7 @@
 
         function sendSelectedDate(selectedDate) {
             const xhr = new XMLHttpRequest();
-            xhr.open('POST', '/processSelectedDate');
+            xhr.open('POST', '/processSelected');
             xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
             xhr.onload = function() {
                 if (xhr.status === 200) {
@@ -120,22 +120,15 @@
             showTimes.forEach(showTime => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
+                    <td>${showTime.roomId}</td>
                     <td>${showTime.showTimeId}</td>
-                    <td>${showTime.showDate}</td>
-                    <td>${showTime.timeStart}</td>
-                    <td>${showTime.time
-                    .timeEnd}</td>
+                    <!-- Thêm các cột khác tùy thuộc vào thông tin bạn muốn hiển thị -->
                 `;
                 showtimeTableBody.appendChild(row);
             });
         }
     </script>
 
-    <script>
-        // Tự động chọn nút của ngày hiện tại khi trang được tải
-        window.onload = function() {
-            document.getElementById('btn-0').click();
-        };
-    </script>
+
 </body>
 </html>

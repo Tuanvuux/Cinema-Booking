@@ -13,7 +13,7 @@ public class Seat {
 
 
     @Column
-    private int seatNumber;
+    private String seatName;
 
 
     @Column
@@ -44,15 +44,13 @@ public class Seat {
     }
 
 
-    public int getSeatNumber() {
-        return seatNumber;
+    public String getSeatName() {
+        return seatName;
     }
 
-
-    public void setSeatNumber(int seatNumber) {
-        this.seatNumber = seatNumber;
+    public void setSeatName(String seatName) {
+        this.seatName = seatName;
     }
-
 
     public String getStatus() {
         return status;

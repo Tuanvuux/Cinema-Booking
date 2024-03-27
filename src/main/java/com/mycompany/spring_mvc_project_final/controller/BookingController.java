@@ -1,13 +1,9 @@
 package com.mycompany.spring_mvc_project_final.controller;
 
-import com.mycompany.spring_mvc_project_final.entities.BookTicket;
-import com.mycompany.spring_mvc_project_final.entities.Cinema;
-import com.mycompany.spring_mvc_project_final.entities.Room;
-import com.mycompany.spring_mvc_project_final.entities.Seat;
-import com.mycompany.spring_mvc_project_final.repository.BookTicketRepository;
-import com.mycompany.spring_mvc_project_final.repository.CinemaRepository;
-import com.mycompany.spring_mvc_project_final.repository.RoomRepository;
-import com.mycompany.spring_mvc_project_final.repository.SeatRepository;
+import com.mycompany.spring_mvc_project_final.entities.*;
+import com.mycompany.spring_mvc_project_final.repository.*;
+import org.hibernate.Hibernate;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +14,11 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import java.security.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -33,6 +33,10 @@ public class BookingController {
     RoomRepository roomRepository;
     @Autowired
     BookTicketRepository bookTicketRepository;
+    @Autowired
+    RoomShowTimeRepository roomShowTimeRepository;
+    @Autowired
+    MovieRepository movieRepository;
 
     @RequestMapping(value = "/cinema",method = GET)
     public String showCinema(Model model){
@@ -148,12 +152,57 @@ public class BookingController {
     }
 
     @GetMapping("/booking")
-    public String handleBooking(@RequestParam("movieId") Long movieId, HttpSession session) {
+    public String handleBooking(@RequestParam("movieId") Long movieId,Model model, HttpSession session) {
         // Lưu movieId vào session
         session.setAttribute("movieId", movieId);
         // Chuyển hướng tới trang showtime
-        return "ShowTime";
+        LocalDate currentDate = LocalDate.now();
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd MM yyyy");
+        DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("EEEE", new Locale("vi", "VN"));
+        List<String> dates = new ArrayList<>();
+        List<String> daysOfWeek = new ArrayList<>();
+
+        // Add current date and day of week
+        dates.add(currentDate.format(dateFormatter));
+        daysOfWeek.add(currentDate.format(dayFormatter));
+
+        // Add next 6 days and their corresponding days of week
+        for (int i = 1; i < 7; i++) {
+            LocalDate nextDate = currentDate.plusDays(i);
+            dates.add(nextDate.format(dateFormatter));
+            daysOfWeek.add(nextDate.format(dayFormatter));
+        }
+
+        model.addAttribute("dates", dates);
+        model.addAttribute("daysOfWeek", daysOfWeek);
+        return "BookingShowTime";
     }
+    @Transactional
+    @PostMapping("/processSelected")
+    @ResponseBody
+    public List<RoomShowtime> processSelectedDate(@RequestBody Map<String, String> payload, @RequestParam("movieId") Long movieId, Model model, HttpSession session) {
+        String selectedDateStr = payload.get("selectedDate");
+        SimpleDateFormat inputFormat = new SimpleDateFormat("dd MM yyyy");
+        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            // Parse the input date string
+            Date date = inputFormat.parse(selectedDateStr);
+
+            // Format the parsed date to the desired output format
+            String outputDate = outputFormat.format(date);
+
+            // Lấy danh sách RoomShowtime dựa trên ngày và movieId
+            List<RoomShowtime> roomShowtimes = roomShowTimeRepository.findShowTimeByMovieIdAndDate(outputDate, movieId);
+            System.out.println("Số lượng roomShowtimes: " + roomShowtimes.size()); // In ra số lượng roomShowtimes để kiểm tra
+            model.addAttribute("roomShowtimes", roomShowtimes);
+
+            return roomShowtimes;
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return Collections.emptyList(); // Trả về danh sách rỗng nếu có lỗi xảy ra
+        }
+    }
+
     @RequestMapping(value = "/payment", method = RequestMethod.GET)
     public String payment(){
         return "PaymentPage";

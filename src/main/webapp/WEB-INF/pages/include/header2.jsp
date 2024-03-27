@@ -33,7 +33,7 @@
                           </a>
                       </li>
                       <li>
-                          <a href="" style="list-style-type: none;  text-decoration: none; color: white;">
+                          <a href="/showtime" style="list-style-type: none;  text-decoration: none; color: white;">
                               Lịch chiếu
                           </a>
                       </li>

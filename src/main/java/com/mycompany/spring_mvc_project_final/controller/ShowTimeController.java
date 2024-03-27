@@ -30,7 +30,6 @@ public class ShowTimeController {
         LocalDate currentDate = LocalDate.now();
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd MM yyyy");
         DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("EEEE", new Locale("vi", "VN"));
-
         List<String> dates = new ArrayList<>();
         List<String> daysOfWeek = new ArrayList<>();
 
@@ -55,17 +54,6 @@ public class ShowTimeController {
     @ResponseBody
     public String processSelectedDate(@RequestBody Map<String, String> payload, Model model) {
         String selectedDateStr = payload.get("selectedDate");
-        // Xử lý ngày được chọn ở đây
-//        System.out.println("Ngày được chọn: " + selectedDateStr);
-//
-//        // Chuyển đổi từ String sang Date
-//        SimpleDateFormat sdf = new SimpleDateFormat("dd MM yyyy");
-//        Date selectedDate = null;
-//        try {
-//            selectedDate = sdf.parse(selectedDateStr);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
         SimpleDateFormat inputFormat = new SimpleDateFormat("dd MM yyyy");
         SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -75,12 +63,13 @@ public class ShowTimeController {
 
             // Format the parsed date to the desired output format
             String outputDate = outputFormat.format(date);
+            System.out.println("checkdate"+outputDate);
 
             // Print the output
-            System.out.println("Ngày được chọn (kiểu Date): " + outputDate.toString());
-
-            //ist<ShowTime> showTimes = showTimeRepository.findByShowDate(selectedDate);
-            List<Movie> movies= movieRepository.findMovie(outputDate.toString());
+            String showDate = outputDate.toString();
+            List<Movie> movies= movieRepository.findMovie(showDate);
+            System.out.println(movies.isEmpty());
+            System.out.println(movies.size());
             if(!movies.isEmpty()){
                 for(Movie movie: movies){
                     Hibernate.initialize(movie.getPost());
