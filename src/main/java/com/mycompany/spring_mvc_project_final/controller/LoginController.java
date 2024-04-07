@@ -151,7 +151,6 @@ public class LoginController {
         // Lưu thông tin người dùng vào cơ sở dữ liệu
         userRepository.save(user);
 
-        System.out.println("registerrrrrrr:   ");
         // Lưu thông tin tài khoản vào cơ sở dữ liệu
         accountRepository.save(accountEntity);
 
