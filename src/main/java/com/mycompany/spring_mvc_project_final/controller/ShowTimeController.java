@@ -53,32 +53,33 @@ public class ShowTimeController {
 
         return "ShowTime";
     }
-    @Transactional
-    @PostMapping("/processSelectedDate")
-    public ResponseEntity<String> processSelectedDate(@RequestBody Map<String, String> payload) {
-        SimpleDateFormat inputFormat = new SimpleDateFormat("dd MM yyyy");
-        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-        try {
-            String selectedDateStr = payload.get("selectedDate");
-            Date date = inputFormat.parse(selectedDateStr);
-            String outputDate = outputFormat.format(date);
-
-            List<Movie> movies = movieRepository.findMovie(outputDate);
-
-            if (!movies.isEmpty()) {
-                for (Movie movie : movies) {
-                    Hibernate.initialize(movie.getPost());
-                }
-            }
-
-            ObjectMapper objectMapper = new ObjectMapper();
-            String jsonMovies = objectMapper.writeValueAsString(movies);
-            return ResponseEntity.ok(jsonMovies);
-        } catch (ParseException | JsonProcessingException e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing selected date");
-        }
-    }
+//    @Transactional
+//    @PostMapping("/processSelectedDate")
+//    public ResponseEntity<String> processSelectedDate(@RequestBody Map<String, String> payload, Model model) {
+//        SimpleDateFormat inputFormat = new SimpleDateFormat("dd MM yyyy");
+//        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
+//
+//        try {
+//            String selectedDateStr = payload.get("selectedDate");
+//            Date date = inputFormat.parse(selectedDateStr);
+//            String outputDate = outputFormat.format(date);
+//
+//            List<Movie> movies = movieRepository.findMovie(outputDate);
+//
+//            System.out.println("ok");
+//            if (!movies.isEmpty()) {
+//                for (Movie movie : movies) {
+//                    Hibernate.initialize(movie.getPost());
+//                }
+//            }
+//
+//            ObjectMapper objectMapper = new ObjectMapper();
+//            String jsonMovies = objectMapper.writeValueAsString(movies);
+//            return ResponseEntity.ok(jsonMovies);
+//        } catch (ParseException | JsonProcessingException e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing selected date");
+//        }
+//    }
 
 }
