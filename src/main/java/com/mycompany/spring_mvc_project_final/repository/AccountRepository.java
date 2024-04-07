@@ -17,5 +17,5 @@ public interface AccountRepository extends CrudRepository<AccountEntity, Long> {
             UserStatus status);
 
     AccountEntity findByEmail(String email);
-    
+
 }
