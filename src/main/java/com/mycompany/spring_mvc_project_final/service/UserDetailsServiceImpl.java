@@ -48,7 +48,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         return (UserDetails) new User(user.getEmail(), user.getPassword(), grantList);
     }
-    
-    
-    
+
+
+
 }

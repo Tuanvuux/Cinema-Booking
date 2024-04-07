@@ -31,9 +31,9 @@
                 Website: http://doubleT-cinema.com/
             </p>
         </div>
-        <div class="col">
-            <a href="" style="color: white;"><img src="" alt="Facebook"></a>
-            <a href="" style="color: white;"><img src="" alt="Youtube"></a>
+        <div class="col" style="display: flex;">
+            <a href="" style="color: white;"><img src="../../resources/img/cinema/facebook.png" alt="Facebook" style="width: 10%;">Facebook</a>
+            <a href="" style="color: white;"><img src="../../resources/img/cinema/instagram.png" alt="Instagram" style="width: 10%;">Instagram</a>
         </div>
     </div>
     <div class="copyright">
