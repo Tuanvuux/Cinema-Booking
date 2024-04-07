@@ -8,8 +8,11 @@ package com.mycompany.spring_mvc_project_final.controller;
 import com.mycompany.spring_mvc_project_final.entities.AccountEntity;
 import com.mycompany.spring_mvc_project_final.entities.Role;
 //import com.mycompany.spring_mvc_project_final.enums.UserStatus;
+import com.mycompany.spring_mvc_project_final.entities.User;
+import com.mycompany.spring_mvc_project_final.enums.UserStatus;
 import com.mycompany.spring_mvc_project_final.repository.AccountRepository;
 import com.mycompany.spring_mvc_project_final.repository.RoleRepository;
+import com.mycompany.spring_mvc_project_final.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,6 +35,8 @@ public class LoginController {
     AccountRepository accountRepository;
     @Autowired
     RoleRepository roleRepository;
+    @Autowired
+    UserRepository userRepository;
 
     @RequestMapping("/login")
     public String loginPage(Model model, @RequestParam(value = "error", required = false) boolean error) {
@@ -121,6 +126,36 @@ public class LoginController {
     @RequestMapping(value = {"/test2"}, method = RequestMethod.GET)
     public String welcomePage44 (Model model) {
         return "home";
+    }
+
+    @GetMapping("/register")
+    public String showRegistrationForm(Model model) {
+        model.addAttribute("user", new User());
+        return "register";
+    }
+
+    @PostMapping("/register")
+    public String registerUser(@ModelAttribute("user") User user) {
+        // Kiểm tra xem email đã được sử dụng chưa
+        if (userRepository.existsByEmail(user.getEmail())) {
+            return "redirect:/register?error"; // Đã tồn tại email trong hệ thống
+        }
+
+        // Mã hóa mật khẩu trước khi lưu vào cơ sở dữ liệu
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+
+        // Thiết lập trạng thái ACTIVE cho tài khoản
+        AccountEntity accountEntity = AccountEntity.fromUser(user);
+        accountEntity.setStatus(UserStatus.ACTIVE);
+
+        // Lưu thông tin người dùng vào cơ sở dữ liệu
+        userRepository.save(user);
+
+        System.out.println("registerrrrrrr:   ");
+        // Lưu thông tin tài khoản vào cơ sở dữ liệu
+        accountRepository.save(accountEntity);
+
+        return "redirect:/login"; // Đăng ký thành công, chuyển hướng đến trang đăng nhập
     }
 
 }

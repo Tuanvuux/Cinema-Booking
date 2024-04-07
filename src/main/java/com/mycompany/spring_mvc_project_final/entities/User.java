@@ -2,6 +2,8 @@ package com.mycompany.spring_mvc_project_final.entities;
 
 
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,6 +23,7 @@ public class User {
     private String lastName;
 
     @Column
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birthDay;
 
     @Column
