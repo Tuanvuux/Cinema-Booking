@@ -7,9 +7,11 @@ package com.mycompany.spring_mvc_project_final.service;
 
 import com.mycompany.spring_mvc_project_final.entities.AccountEntity;
 import com.mycompany.spring_mvc_project_final.entities.Role;
-import com.mycompany.spring_mvc_project_final.enums.UserStatus;
+
 import java.util.HashSet;
 import java.util.Set;
+
+import com.mycompany.spring_mvc_project_final.enums.UserStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

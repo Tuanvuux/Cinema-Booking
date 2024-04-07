@@ -6,6 +6,7 @@
 package com.mycompany.spring_mvc_project_final.entities;
 
 import com.mycompany.spring_mvc_project_final.enums.UserStatus;
+
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.Column;
@@ -88,6 +89,16 @@ public class AccountEntity implements Serializable {
     public void setStatus(UserStatus status) {
         this.status = status;
     }
+
+
+    public static AccountEntity fromUser(User user) {
+        AccountEntity accountEntity = new AccountEntity();
+        accountEntity.setEmail(user.getEmail());
+        accountEntity.setPassword(user.getPassword());
+        accountEntity.setStatus(UserStatus.ACTIVE); // Mặc định là ACTIVE
+        return accountEntity;
+    }
+
 
 }
 
