@@ -2,6 +2,8 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
+<%@taglib  uri="http://www.springframework.org/security/tags" prefix="sec" %>
+
 <!DOCTYPE html>
 <html>
 
@@ -74,9 +76,14 @@
                                 </center>
                                 <div class="button"
                                     style="display: flex;flex-wrap: nowrap;justify-content: space-evenly; height: 25px;">
-                                    <a href="/movie/detail?id=${movie.movieId}" class="btn">Chi tiết</a>
-                                    <a href="/admin/editMovie?id=${movie.movieId}" class="btn">Edit</a>
-                                    <a href="/admin/deleteMovie?id=${movie.movieId}" class="btn">Delete</a>
+
+                                    <sec:authorize access="isAuthenticated()">
+                                        <a href="/movie/detail?id=${movie.movieId}" class="btn">Chi tiết</a>
+                                         <sec:authorize access="hasRole('ROLE_ADMIN')">
+                                              <a href="/admin/editMovie?id=${movie.movieId}" class="btn">Edit</a>
+                                              <a href="/admin/deleteMovie?id=${movie.movieId}" class="btn">Delete</a>
+                                         </sec:authorize>
+                                    </sec:authorize>
                                 </div>
                             </div>
                         </div>
