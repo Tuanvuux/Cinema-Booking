@@ -53,7 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http.authorizeRequests().antMatchers("/", "/login", "/logout", "/home").permitAll();
 
-        http.authorizeRequests().antMatchers("/*").access("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
+        http.authorizeRequests().antMatchers("/user/*").access("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
                 .antMatchers("/admin/*").access("hasRole('ROLE_ADMIN')");
 
         http.authorizeRequests().and().exceptionHandling().accessDeniedPage("/403");
@@ -66,6 +66,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("username")
                 .passwordParameter("password")
                 .and().logout().logoutUrl("/logout")
-                .logoutSuccessUrl("/home").deleteCookies("JSESSIONID");
+                .logoutSuccessUrl("/").deleteCookies("JSESSIONID");
     }
 }

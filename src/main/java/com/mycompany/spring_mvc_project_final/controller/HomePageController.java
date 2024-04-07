@@ -30,9 +30,11 @@ public class HomePageController {
             // Kiểm tra xem principal có phải là một UserDetails không để lấy username
             if (principal instanceof UserDetails) {
                 username = ((UserDetails) principal).getUsername();
+                User user = userRepository.findByEmail(username);
+                session.setAttribute("userId", user.getUserId());
             }
-            User user =userRepository.findByEmail(username);
-            session.setAttribute("userId", user.getUserId());
+
+
             List<Movie> movieList = (List<Movie>) movieRepository.findAll();
             model.addAttribute("movieList", movieList);
             return "home";
