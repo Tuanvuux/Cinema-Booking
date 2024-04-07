@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import java.security.Timestamp;
@@ -60,15 +61,23 @@ public class BookingController {
         return "Room";
     }
 
-    @RequestMapping(value = "/seat", method = GET)
-    public String showSeat(Model model) {
+    @PostMapping(value = "/seat")
+    public String bookSeat(@RequestParam("roomId") Long roomId,
+                           @RequestParam("showTimeId") Long showTimeId,
+                           HttpServletRequest request, Model model) {
+        // Lấy session từ request
+        HttpSession session = request.getSession();
+
+        // Lưu giá trị roomId và showTimeId vào session
+        session.setAttribute("roomId", roomId);
+        session.setAttribute("showTimeId", showTimeId);
         // Lấy danh sách ghế từ bảng seat
-        List<Seat> seatList = (List<Seat>) seatRepository.findByRoom_RoomId(1L);
+        List<Seat> seatList = (List<Seat>) seatRepository.findByRoom_RoomId(roomId);
 
         // Lặp qua danh sách ghế
         for (Seat seat : seatList) {
             // Kiểm tra xem ghế có trong bảng bookticket hay không
-            Optional<BookTicket> optionalBookTicket = bookTicketRepository.findFirstBySeatId(seat.getSeatId());
+            Optional<BookTicket> optionalBookTicket = bookTicketRepository.findFirstBySeatIdAndRoomIdAndShowTimeId(seat.getSeatId(), roomId, showTimeId);
 
             BookTicket bookTicket = optionalBookTicket.orElse(null);
 
@@ -107,8 +116,10 @@ public class BookingController {
     @Transactional
     @PostMapping("/selectSeat")
     @ResponseBody
-    public ResponseEntity<Map<String, Object>> selectSeat(@RequestParam("seatId") String seatIdRequest) {
+    public ResponseEntity<Map<String, Object>> selectSeat(@RequestParam("seatId") String seatIdRequest, HttpSession session) {
         Map<String, Object> response = new HashMap<>();
+        Long roomId = (Long) session.getAttribute("roomId");
+        Long showTimeId = (Long) session.getAttribute("showTimeId");
 
         try {
             // Kiểm tra xem seatIdRequest có rỗng không
@@ -136,9 +147,12 @@ public class BookingController {
                 BookTicket bookTicket = new BookTicket();
                 bookTicket.setLastSelectedTime(currentTime);
                 bookTicket.setSeatId(seatId);
+                bookTicket.setShowTimeId(showTimeId);
+                bookTicket.setRoomId(roomId);
                 bookTicket.setStatus("1");
 
                 bookTicketRepository.save(bookTicket);
+                System.out.println("thanhf coong");
 
                 response.put("status", "success");
                 response.put("message", "Ghế đã được đặt thành công");
@@ -264,7 +278,11 @@ public class BookingController {
     }
 
     @RequestMapping(value = "/payment", method = RequestMethod.GET)
-    public String payment(){
+    public String payment(HttpSession session, Model model){
+        Long movieId = (Long) session.getAttribute("movieId");
+        Long showTimeId = (Long) session.getAttribute("showTimeId");
+        List<Long> ListIdSeat = (List<Long>) session.getAttribute("selectedSeatIds");
+        System.out.println("a");
         return "PaymentPage";
     }
 

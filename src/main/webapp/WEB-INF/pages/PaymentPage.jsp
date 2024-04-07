@@ -1,3 +1,4 @@
+<%@page contentType="text/html" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -86,6 +87,8 @@ button:hover {
 
 </style>
 <body>
+  <jsp:include page="include/header.jsp" />
+    <jsp:include page="include/header2.jsp" />
     <div class="container">
         <h1>Phương thức thanh toán</h1>
         <form action="#">
@@ -117,5 +120,7 @@ button:hover {
             <button type="submit">Tiếp tục</button>
         </form>
     </div>
+      <jsp:include page="include/footer.jsp" />
 </body>
+
 </html>
