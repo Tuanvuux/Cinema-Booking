@@ -90,5 +90,15 @@ public class AccountEntity implements Serializable {
         this.status = status;
     }
 
+
+    public static AccountEntity fromUser(User user) {
+        AccountEntity accountEntity = new AccountEntity();
+        accountEntity.setEmail(user.getEmail());
+        accountEntity.setPassword(user.getPassword());
+        accountEntity.setStatus(UserStatus.ACTIVE); // Mặc định là ACTIVE
+        return accountEntity;
+    }
+
+
 }
 

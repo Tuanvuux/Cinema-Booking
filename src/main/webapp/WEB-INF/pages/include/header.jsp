@@ -38,6 +38,7 @@
                             <!-- If No login then will show Login Page -->
                             <sec:authorize access="!isAuthenticated()">
                                 <a href="<c:url value="/login" />">Login</a>
+                                <a href="<c:url value="/register" />">Register</a>
                             </sec:authorize>
                         </div>
                     </div>
