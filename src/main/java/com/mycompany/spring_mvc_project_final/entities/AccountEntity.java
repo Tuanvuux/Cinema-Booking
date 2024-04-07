@@ -6,6 +6,7 @@
 package com.mycompany.spring_mvc_project_final.entities;
 
 import com.mycompany.spring_mvc_project_final.enums.UserStatus;
+
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.Column;
