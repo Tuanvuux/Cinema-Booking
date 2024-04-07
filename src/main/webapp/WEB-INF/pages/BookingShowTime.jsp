@@ -66,30 +66,31 @@
 <h1>Phim ${movie.movieName}</h1>
 
 <table>
-    <thead>
-        <tr>
-            <th>Thời gian chiếu</th>
-        </tr>
-    </thead>
-    <tbody>
-        <c:forEach var="showtime" items="${showTimes}">
-            <c:forEach var="roomShowTime" items="${roomShowTimes}">
                 <tr>
+
+                <c:forEach var="showtime" items="${showTimes}">
+                            <c:forEach var="roomShowTime" items="${roomShowTimes}">
                     <td>
-                        <c:set var="formattedStartTime">
-                            <fmt:formatDate value="${showtime.timeStart}" pattern="HH:mm" />
-                        </c:set>
-                        <c:set var="formattedEndTime">
-                            <fmt:formatDate value="${showtime.timeEnd}" pattern="HH:mm" />
-                        </c:set>
-                        ${formattedStartTime} - ${formattedEndTime}
-                        <br/>
-                        Phòng ${roomShowTime.room.roomId}
+                        <form action="/seat" method="post">
+                            <input type="hidden" name="roomId" value="${roomShowTime.room.roomId}" />
+                            <input type="hidden" name="showTimeId" value="${showtime.showTimeId}" />
+                            <button type="submit" class="showtime-button">
+                                <c:set var="formattedStartTime">
+                                    <fmt:formatDate value="${showtime.timeStart}" pattern="HH:mm" />
+                                </c:set>
+                                <c:set var="formattedEndTime">
+                                    <fmt:formatDate value="${showtime.timeEnd}" pattern="HH:mm" />
+                                </c:set>
+                                ${formattedStartTime} - ${formattedEndTime}
+                                <br/>
+                                Phòng ${roomShowTime.room.roomId}
+                            </button>
+                        </form>
                     </td>
+
+                     </c:forEach>
+                            </c:forEach>
                 </tr>
-            </c:forEach>
-        </c:forEach>
-    </tbody>
 </table>
 <script>
   document.addEventListener("DOMContentLoaded", function() {

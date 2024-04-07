@@ -45,6 +45,7 @@
                 </c:otherwise>
             </c:choose>
         </c:forEach>
+
     </div>
     <div id="selectedSeats">
         <%-- Hiển thị danh sách các ghế đã chọn --%>
@@ -52,6 +53,8 @@
             <div onclick="toggleSeat('seat_${selectedSeatId}', '${selectedSeatId}')">Ghế đã chọn: ${selectedSeatId}</div>
         </c:forEach>
     </div>
+    <a href="/payment" class="btn" style="background-color: #007bff; color: #fff; padding: 10px 20px; border-radius: 5px; text-decoration: none;">Thanh toán</a>
+
     <script>
 function toggleSeat(seatId, seatIdValue, seatName) {
     var seatElement = document.getElementById(seatId);
