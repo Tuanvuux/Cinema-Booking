@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import java.security.Timestamp;
+import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -22,6 +23,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Controller
 public class BookingController {
@@ -37,6 +39,10 @@ public class BookingController {
     RoomShowTimeRepository roomShowTimeRepository;
     @Autowired
     MovieRepository movieRepository;
+    @Autowired
+    MovieShowtimeRepository movieShowtimeRepository;
+    @Autowired
+    ShowTimeRepository showTimeRepository;
 
     @RequestMapping(value = "/cinema",method = GET)
     public String showCinema(Model model){
@@ -151,25 +157,58 @@ public class BookingController {
         }
     }
 
-    @GetMapping("/booking")
-    public String handleBooking(@RequestParam("movieId") Long movieId,Model model, HttpSession session) {
+    @RequestMapping(value = "/booking", method = GET)
+    public String handleBooking(@RequestParam("movieId") Long movieId, Model model, HttpSession session) {
         // Lưu movieId vào session
         session.setAttribute("movieId", movieId);
-        // Chuyển hướng tới trang showtime
+
+        // Lấy ngày hiện tại
         LocalDate currentDate = LocalDate.now();
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd MM yyyy");
+
+        // Chuyển định dạng ngày theo yêu cầu (VD: "yyyy-MM-dd")
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        // Chuyển đổi đối tượng LocalDate thành chuỗi theo định dạng "yyyy-MM-dd"
+        String showDate = dateFormatter.format(currentDate);
+
+        // In ra ngày đã định dạng
+        System.out.println("Ngày hiện tại: " + showDate);
+
+        // Tìm kiếm thông tin phim theo movieId
+        Movie movie = movieRepository.findByMovieId(movieId);
+
+        // Chuyển đổi chuỗi showDate sang kiểu java.sql.Date
+        java.sql.Date sqlShowDate = java.sql.Date.valueOf(currentDate);
+
+        // Tìm kiếm các lịch chiếu dựa trên movieId và ngày hiện tại
+        List<ShowTime> showTimes = showTimeRepository.findShowTimesByMovieIdAndShowDate(movieId, sqlShowDate);
+        List<Long> showtimeIds = new ArrayList<>();
+        for (ShowTime showTime : showTimes) {
+            showtimeIds.add(showTime.getShowTimeId());
+        }
+        System.out.println(showTimes.size());
+
+        List<RoomShowtime> roomShowTimes = roomShowTimeRepository.findByShowTime_ShowTimeIdIn(showtimeIds);
+        System.out.println(roomShowTimes.size());
+        // Thêm thông tin phim và các lịch chiếu vào model để hiển thị trên trang booking
+        model.addAttribute("roomShowTimes", roomShowTimes);
+        model.addAttribute("movie", movie);
+        model.addAttribute("showTimes", showTimes);
+
+        LocalDate currentDates = LocalDate.now();
+        DateTimeFormatter dateFormatters = DateTimeFormatter.ofPattern("dd MM yyyy");
         DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("EEEE", new Locale("vi", "VN"));
         List<String> dates = new ArrayList<>();
         List<String> daysOfWeek = new ArrayList<>();
 
         // Add current date and day of week
-        dates.add(currentDate.format(dateFormatter));
+        dates.add(currentDates.format(dateFormatters));
         daysOfWeek.add(currentDate.format(dayFormatter));
 
         // Add next 6 days and their corresponding days of week
         for (int i = 1; i < 7; i++) {
             LocalDate nextDate = currentDate.plusDays(i);
-            dates.add(nextDate.format(dateFormatter));
+            dates.add(nextDate.format(dateFormatters));
             daysOfWeek.add(nextDate.format(dayFormatter));
         }
 
@@ -177,30 +216,51 @@ public class BookingController {
         model.addAttribute("daysOfWeek", daysOfWeek);
         return "BookingShowTime";
     }
-    @Transactional
-    @PostMapping("/processSelected")
-    @ResponseBody
-    public List<RoomShowtime> processSelectedDate(@RequestBody Map<String, String> payload, @RequestParam("movieId") Long movieId, Model model, HttpSession session) {
-        String selectedDateStr = payload.get("selectedDate");
-        SimpleDateFormat inputFormat = new SimpleDateFormat("dd MM yyyy");
-        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            // Parse the input date string
-            Date date = inputFormat.parse(selectedDateStr);
+    @RequestMapping(value = "/booking", method = POST)
+    public String PostBooking(@RequestParam("selectedDate") String selectedDate,Model model, HttpSession session) {
+        // Lưu movieId vào session
+        Long movieId = (Long) session.getAttribute("movieId");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MM yyyy");
+        LocalDate localDate = LocalDate.parse(selectedDate, formatter);
+        java.sql.Date sqlSelectedDate = java.sql.Date.valueOf(localDate);
 
-            // Format the parsed date to the desired output format
-            String outputDate = outputFormat.format(date);
+        List<ShowTime> showTimes = showTimeRepository.findShowTimesByMovieIdAndShowDate(movieId, sqlSelectedDate);
 
-            // Lấy danh sách RoomShowtime dựa trên ngày và movieId
-            List<RoomShowtime> roomShowtimes = roomShowTimeRepository.findShowTimeByMovieIdAndDate(outputDate, movieId);
-            System.out.println("Số lượng roomShowtimes: " + roomShowtimes.size()); // In ra số lượng roomShowtimes để kiểm tra
-            model.addAttribute("roomShowtimes", roomShowtimes);
-
-            return roomShowtimes;
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return Collections.emptyList(); // Trả về danh sách rỗng nếu có lỗi xảy ra
+        Movie movie = movieRepository.findByMovieId(movieId);
+        List<Long> showtimeIds = new ArrayList<>();
+        for (ShowTime showTime : showTimes) {
+            showtimeIds.add(showTime.getShowTimeId());
         }
+        System.out.println(showTimes.size());
+
+        List<RoomShowtime> roomShowTimes = roomShowTimeRepository.findByShowTime_ShowTimeIdIn(showtimeIds);
+        System.out.println(roomShowTimes.size());
+        // Thêm thông tin phim và các lịch chiếu vào model để hiển thị trên trang booking
+        model.addAttribute("roomShowTimes", roomShowTimes);
+        model.addAttribute("movie", movie);
+        model.addAttribute("showTimes", showTimes);
+
+        LocalDate currentDates = LocalDate.now();
+        DateTimeFormatter dateFormatters = DateTimeFormatter.ofPattern("dd MM yyyy");
+        DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("EEEE", new Locale("vi", "VN"));
+        List<String> dates = new ArrayList<>();
+        List<String> daysOfWeek = new ArrayList<>();
+
+        // Add current date and day of week
+        LocalDate currentDate = LocalDate.now();
+        dates.add(currentDates.format(dateFormatters));
+        daysOfWeek.add(currentDate.format(dayFormatter));
+
+        // Add next 6 days and their corresponding days of week
+        for (int i = 1; i < 7; i++) {
+            LocalDate nextDate = currentDate.plusDays(i);
+            dates.add(nextDate.format(dateFormatters));
+            daysOfWeek.add(nextDate.format(dayFormatter));
+        }
+
+        model.addAttribute("dates", dates);
+        model.addAttribute("daysOfWeek", daysOfWeek);
+        return "BookingShowTime";
     }
 
     @RequestMapping(value = "/payment", method = RequestMethod.GET)

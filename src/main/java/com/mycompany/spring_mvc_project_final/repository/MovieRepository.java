@@ -20,7 +20,7 @@ public interface MovieRepository extends CrudRepository<Movie, Long> {
     List<Movie> findByActor(String actor);
     List<Movie> findByMovieNameOrDirectorOrProducerOrActor(String movieName, String director, String producer, String actor);
 
-    @Query(value = "SELECT DISTINCT m.movieId, m.actor, m.describeMovie, m.movieName, m.nation, m.photo, m.producer, m.trailer, m.cateId, m.director FROM movie m\n" +
+    @Query(value = "SELECT DISTINCT m.movieId, m.actor, m.describeMovie, m.movieName, m.nation, m.photo, m.producer, m.timeSlot, m.trailer, m.cateId, m.director FROM movie m\n" +
             "join movieshowtime m1 on m.movieId = m1.movieId\n" +
             "join showtime s1 on m1.showTimeId= s1.showTimeId\n" +
             "join roomshowtime r1 on s1.showTimeId=r1.showTimeId\n" +
