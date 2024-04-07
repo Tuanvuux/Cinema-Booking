@@ -277,11 +277,11 @@ public class BookingController {
         return "BookingShowTime";
     }
 
-    @RequestMapping(value = "/payment", method = RequestMethod.GET)
-    public String payment(HttpSession session, Model model){
+    @PostMapping("/payment")
+    public String processPayment(@RequestBody List<Integer> selectedSeats, HttpSession session, Model model) {
         Long movieId = (Long) session.getAttribute("movieId");
         Long showTimeId = (Long) session.getAttribute("showTimeId");
-        List<Long> ListIdSeat = (List<Long>) session.getAttribute("selectedSeatIds");
+        System.out.println(selectedSeats);
         System.out.println("a");
         return "PaymentPage";
     }
