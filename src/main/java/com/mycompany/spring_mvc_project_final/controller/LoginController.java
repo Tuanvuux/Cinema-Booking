@@ -7,7 +7,7 @@ package com.mycompany.spring_mvc_project_final.controller;
 
 import com.mycompany.spring_mvc_project_final.entities.AccountEntity;
 import com.mycompany.spring_mvc_project_final.entities.Role;
-import com.mycompany.spring_mvc_project_final.enums.UserStatus;
+//import com.mycompany.spring_mvc_project_final.enums.UserStatus;
 import com.mycompany.spring_mvc_project_final.repository.AccountRepository;
 import com.mycompany.spring_mvc_project_final.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,7 +78,7 @@ public class LoginController {
         AccountEntity newAccount = new AccountEntity();
         newAccount.setEmail(email);
         newAccount.setPassword(bCryptPasswordEncoder.encode(password));
-        newAccount.setStatus(UserStatus.ACTIVE);
+//        newAccount.setStatus(UserStatus.ACTIVE);
 
         // muon lay role tu DB thi sd RoleRepository de select toan bo list role
 
