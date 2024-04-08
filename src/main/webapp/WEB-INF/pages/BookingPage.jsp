@@ -48,14 +48,17 @@
 
     </div>
     <div id="selectedSeats">
-        <%-- Hiển thị danh sách các ghế đã chọn --%>
-        <c:forEach items="${selectedSeats}" var="selectedSeatId">
-            <div onclick="toggleSeat('seat_${selectedSeatId}', '${selectedSeatId}')">Ghế đã chọn: ${selectedSeatId}</div>
-        </c:forEach>
+        <h3>Ghế đã chọn:</h3>
+        <ul id="selectedSeatsList">
+            <!-- Danh sách các ghế đã chọn sẽ được cập nhật tại đây -->
+        </ul>
     </div>
+
+
     <a href="/payment" class="btn" style="background-color: #007bff; color: #fff; padding: 10px 20px; border-radius: 5px; text-decoration: none;">Thanh toán</a>
 
     <script>
+
 function toggleSeat(seatId, seatIdValue, seatName) {
     var seatElement = document.getElementById(seatId);
     var isSelected = seatElement.classList.contains('selected');
@@ -63,16 +66,24 @@ function toggleSeat(seatId, seatIdValue, seatName) {
     xhr.open("POST", "/selectSeat", true);
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
     xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            var response = JSON.parse(xhr.responseText);
-            if (response.status === 'success') {
-                if (isSelected) {
-                    seatElement.classList.remove('selected');
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                var response = JSON.parse(xhr.responseText);
+                if (response.status === 'success') {
+                    if (isSelected) {
+                        seatElement.classList.remove('selected');
+                        // Xóa ghế đã chọn khỏi danh sách
+                        removeSelectedSeat(seatIdValue);
+                    } else {
+                        seatElement.classList.add('selected');
+                        // Thêm ghế đã chọn vào danh sách
+                        addSelectedSeat(seatIdValue);
+                    }
                 } else {
-                    seatElement.classList.add('selected');
+                    console.log("Lỗi khi cập nhật trạng thái ghế.");
                 }
             } else {
-                console.log("Lỗi khi cập nhật trạng thái ghế.");
+                console.log("Lỗi khi gửi yêu cầu đến máy chủ.");
             }
         }
     };
@@ -80,6 +91,26 @@ function toggleSeat(seatId, seatIdValue, seatName) {
     var data = "seatId=" + encodeURIComponent(seatIdValue);
     xhr.send(data);
 }
+
+// Hàm thêm ghế đã chọn vào danh sách
+function addSelectedSeat(seatId) {
+    var selectedSeatsList = document.getElementById('selectedSeatsList');
+    var seatListItem = document.createElement('li');
+    seatListItem.textContent = seatId;
+    seatListItem.id = "selectedSeat_" + seatId; // Tạo id duy nhất cho mỗi phần tử
+    selectedSeatsList.appendChild(seatListItem);
+}
+
+// Hàm xóa ghế đã chọn khỏi danh sách
+function removeSelectedSeat(seatId) {
+    var selectedSeatElement = document.getElementById("selectedSeat_" + seatId); // Tìm phần tử cần xóa dựa trên id duy nhất
+    if (selectedSeatElement) {
+        selectedSeatElement.remove(); // Xóa phần tử
+    }
+}
+
+
+
 
        </script>
 
