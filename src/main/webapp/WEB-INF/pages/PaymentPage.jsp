@@ -1,5 +1,4 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -110,9 +109,9 @@ button:hover {
             <div class="noi-dung-thanh-toan">
                 <h2>Nội dung thanh toán</h2>
                 <ul>
-                  <li>Phim: ${movie.get().movieName}</li>
-                    <li>Ngày: <fmt:formatDate pattern="dd/MM/yyyy" value="${showTime.get().showDate}" /></li>
-                    <li>Thời gian: ${showTime.get().timeStart} - ${showTime.get().timeEnd}</li>
+                    <li>Phim:</li>
+                    <li>Ngày:</li>
+                    <li>Thời gian:</li>
                     <li>Ghế:</li>
                     <li>Số vé:</li>
                     <li>Tổng tiền:</li>
