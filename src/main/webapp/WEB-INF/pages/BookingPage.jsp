@@ -53,25 +53,35 @@
             <div onclick="toggleSeat('seat_${selectedSeatId}', '${selectedSeatId}')">Ghế đã chọn: ${selectedSeatId}</div>
         </c:forEach>
     </div>
-   <form id="paymentForm" action="/payment" method="post">
-       <input type="hidden" name="selectedSeats" id="selectedSeatsInput">
-       <button type="submit" class="btn" style="background-color: #007bff; color: #fff; padding: 10px 20px; border-radius: 5px; text-decoration: none;">Thanh toán</button>
-   </form>
+    <a href="/payment" class="btn" style="background-color: #007bff; color: #fff; padding: 10px 20px; border-radius: 5px; text-decoration: none;">Thanh toán</a>
+
     <script>
-        var selectedSeats = [];
-        function toggleSeat(seatId, seatIdValue, seatName) {
-            var seatElement = document.getElementById(seatId);
-            var isSelected = seatElement.classList.contains('selected');
-            if (isSelected) {
-                seatElement.classList.remove('selected');
-                selectedSeats = selectedSeats.filter(id => id !== seatIdValue);
+function toggleSeat(seatId, seatIdValue, seatName) {
+    var seatElement = document.getElementById(seatId);
+    var isSelected = seatElement.classList.contains('selected');
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/selectSeat", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            var response = JSON.parse(xhr.responseText);
+            if (response.status === 'success') {
+                if (isSelected) {
+                    seatElement.classList.remove('selected');
+                } else {
+                    seatElement.classList.add('selected');
+                }
             } else {
-                seatElement.classList.add('selected');
-                selectedSeats.push(seatIdValue);
+                console.log("Lỗi khi cập nhật trạng thái ghế.");
             }
         }
+    };
+    // Gửi dữ liệu dưới dạng form data
+    var data = "seatId=" + encodeURIComponent(seatIdValue);
+    xhr.send(data);
+}
 
-    </script>
+       </script>
 
 </body>
 </html>

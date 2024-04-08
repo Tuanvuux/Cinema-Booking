@@ -25,106 +25,84 @@
         .day-button:hover {
             background-color: #ddd;
         }
-        .selected {
-            background-color: #007bff; /* Màu nền của nút khi được chọn */
-            color: #fff; /* Màu chữ của nút khi được chọn */
+        .day-button.selected {
+            background-color: blue; /* Thay 'blue' bằng màu bạn muốn */
+            color: white; /* Thêm màu chữ tương thích */
         }
-         .day-button.selected {
-                background-color: #007bff; /* Màu nền của nút khi được chọn */
-                color: #fff; /* Màu chữ của nút khi được chọn */
-            }
     </style>
 </head>
 <body>
- <jsp:include page="include/header.jsp" />
+    <jsp:include page="include/header.jsp" />
     <jsp:include page="include/header2.jsp" />
 
-<h2>Chọn ngày chiếu</h2>
-<form id="dateForm" action="/booking?movieId=${movie.movieId}" method="post"> <!-- Địa chỉ endpoint của controller xử lý POST -->
-    <table>
-        <thead>
-            <tr>
-                <c:forEach var="day" items="${daysOfWeek}">
-                    <td>${day}</td>
-                </c:forEach>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <c:forEach var="date" items="${dates}" varStatus="loop">
-                    <th>
-                        <button type="submit" class="day-button ${loop.index == 0 ? 'selected' : ''}" name="selectedDate" value="${date}">
-                            ${date.split(' ')[0]}/${date.split(' ')[1]}
-                        </button>
-                    </th>
-                </c:forEach>
-            </tr>
-        </tbody>
-    </table>
-</form>
-<h2>Chọn lịch chiếu</h2>
-<h1>Phim ${movie.movieName}</h1>
-
-<table>
+    <h2>Chọn ngày chiếu</h2>
+    <form id="dateForm" action="/booking?movieId=${movie.movieId}" method="post"> <!-- Địa chỉ endpoint của controller xử lý POST -->
+        <table>
+            <thead>
                 <tr>
+                    <c:forEach var="day" items="${daysOfWeek}">
+                        <td>${day}</td>
+                    </c:forEach>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <c:forEach var="date" items="${dates}" varStatus="loop">
+                        <th>
+                            <button type="submit" class="day-button" name="selectedDate" value="${date}" onclick="toggleButtonColor(this)">
+                                ${date.split(' ')[0]}/${date.split(' ')[1]}
+                            </button>
+                        </th>
+                    </c:forEach>
+                </tr>
+            </tbody>
+        </table>
+    </form>
 
-                <c:forEach var="showtime" items="${showTimes}">
-                            <c:forEach var="roomShowTime" items="${roomShowTimes}">
+    <h2>Chọn lịch chiếu</h2>
+    <h1>Phim ${movie.movieName}</h1>
+
+    <table>
+    <tr>
+        <c:if test="${not empty showTimes}">
+            <c:forEach var="index" begin="0" end="${showTimes.size() - 1}" varStatus="loop">
+
                     <td>
                         <form action="/seat" method="post">
-                            <input type="hidden" name="roomId" value="${roomShowTime.room.roomId}" />
-                            <input type="hidden" name="showTimeId" value="${showtime.showTimeId}" />
+                            <input type="hidden" name="roomId" value="${roomShowTimes[index].room.roomId}" />
+                            <input type="hidden" name="showTimeId" value="${showTimes[index].showTimeId}" />
                             <button type="submit" class="showtime-button">
                                 <c:set var="formattedStartTime">
-                                    <fmt:formatDate value="${showtime.timeStart}" pattern="HH:mm" />
+                                    <fmt:formatDate value="${showTimes[index].timeStart}" pattern="HH:mm" />
                                 </c:set>
                                 <c:set var="formattedEndTime">
-                                    <fmt:formatDate value="${showtime.timeEnd}" pattern="HH:mm" />
+                                    <fmt:formatDate value="${showTimes[index].timeEnd}" pattern="HH:mm" />
                                 </c:set>
                                 ${formattedStartTime} - ${formattedEndTime}
                                 <br/>
-                                Phòng ${roomShowTime.room.roomId}
+                                Phòng ${roomShowTimes[index].room.roomId}
                             </button>
                         </form>
                     </td>
 
-                     </c:forEach>
-                            </c:forEach>
-                </tr>
-</table>
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-      // Lấy tất cả các nút ngày
-      const buttons = document.querySelectorAll('.day-button');
-
-      // Tìm xem có nút nào đã được chọn mặc định hay không
-      let isSelected = false;
-      buttons.forEach(button => {
-          if (button.classList.contains('selected')) {
-              isSelected = true;
-          }
-      });
-
-      // Nếu không có nút nào được chọn mặc định, chọn nút đầu tiên
-      if (!isSelected) {
-          buttons[0].classList.add('selected');
-      }
-
-      // Lặp qua từng nút để thêm sự kiện click
-      buttons.forEach(button => {
-          button.addEventListener('click', function() {
-              // Loại bỏ lớp 'selected' từ tất cả các nút
-              buttons.forEach(btn => {
-                  btn.classList.remove('selected');
-              });
-
-              // Thêm lớp 'selected' cho nút được nhấp vào
-              this.classList.add('selected');
-          });
-      });
-  });
-</script>
+            </c:forEach>
+        </c:if>
+        </tr>
+    </table>
 
     <jsp:include page="include/footer.jsp" />
 </body>
+<script>
+    function toggleButtonColor(button) {
+        // Loại bỏ lớp 'selected' khỏi tất cả các nút
+        var buttons = document.querySelectorAll('.day-button');
+        buttons.forEach(function(btn) {
+            btn.classList.remove('selected');
+        });
+
+        // Thêm lớp 'selected' cho nút được nhấn
+        button.classList.add('selected');
+    }
+</script>
+
 </html>
