@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Show Time</title>
-
+    <jsp:include page="include/css-page.jsp"/>
     <style>
         table {
             border-collapse: collapse;
@@ -30,7 +30,7 @@
             color: #fff; /* Màu chữ của nút khi được chọn */
         }
          .day-button.selected {
-                background-color: #007bff; /* Màu nền của nút khi được chọn */
+                background-color: #8d0000; /* Màu nền của nút khi được chọn */
                 color: #fff; /* Màu chữ của nút khi được chọn */
             }
     </style>
