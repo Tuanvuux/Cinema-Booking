@@ -122,7 +122,7 @@ public class BookingController {
         Map<String, Object> response = new HashMap<>();
         Long roomId = (Long) session.getAttribute("roomId");
         Long showTimeId = (Long) session.getAttribute("showTimeId");
-
+        Long userId = (Long) session.getAttribute("userId");
         try {
             // Kiểm tra xem seatIdRequest có rỗng không
             if (seatIdRequest.isEmpty()) {
@@ -151,7 +151,9 @@ public class BookingController {
                 bookTicket.setSeatId(seatId);
                 bookTicket.setShowTimeId(showTimeId);
                 bookTicket.setRoomId(roomId);
+                bookTicket.setUserId(userId);
                 bookTicket.setStatus("1");
+                System.out.println("a");
 
                 bookTicketRepository.save(bookTicket);
                 System.out.println("thanhf coong");
