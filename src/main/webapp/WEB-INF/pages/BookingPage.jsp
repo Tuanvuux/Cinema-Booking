@@ -6,7 +6,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chọn Chỗ Xem Phim</title>
-    <jsp:include page="../include/css-page.jsp" />
     <style>
         .seat {
             width: 30px;
@@ -50,9 +49,7 @@
     </div>
     <div id="selectedSeats">
         <h3>Ghế đã chọn:</h3>
-        <ul id="selectedSeatsList">
-            <!-- Danh sách các ghế đã chọn sẽ được cập nhật tại đây -->
-        </ul>
+        <div id="selectedSeatsList"></div>
     </div>
 
 
@@ -74,11 +71,11 @@ function toggleSeat(seatId, seatIdValue, seatName) {
                     if (isSelected) {
                         seatElement.classList.remove('selected');
                         // Xóa ghế đã chọn khỏi danh sách
-                        removeSelectedSeat(seatIdValue);
+                        removeSelectedSeat(seatName); // Thay seatIdValue thành seatName
                     } else {
                         seatElement.classList.add('selected');
                         // Thêm ghế đã chọn vào danh sách
-                        addSelectedSeat(seatIdValue);
+                        addSelectedSeat(seatName); // Truyền seatName vào hàm
                     }
                 } else {
                     console.log("Lỗi khi cập nhật trạng thái ghế.");
@@ -94,24 +91,32 @@ function toggleSeat(seatId, seatIdValue, seatName) {
 }
 
 // Hàm thêm ghế đã chọn vào danh sách
-function addSelectedSeat(seatId) {
+function addSelectedSeat(seatName) {
     var selectedSeatsList = document.getElementById('selectedSeatsList');
-    var seatListItem = document.createElement('li');
-    seatListItem.textContent = seatId;
-    seatListItem.id = "selectedSeat_" + seatId; // Tạo id duy nhất cho mỗi phần tử
-    selectedSeatsList.appendChild(seatListItem);
+    var existingSeats = selectedSeatsList.textContent;
+
+    // Thêm dấu phẩy nếu danh sách không trống
+    if (existingSeats !== "") {
+        existingSeats += ", ";
+    }
+
+    // Thêm tên ghế mới vào danh sách
+    selectedSeatsList.textContent = existingSeats + seatName;
 }
 
 // Hàm xóa ghế đã chọn khỏi danh sách
-function removeSelectedSeat(seatId) {
-    var selectedSeatElement = document.getElementById("selectedSeat_" + seatId); // Tìm phần tử cần xóa dựa trên id duy nhất
-    if (selectedSeatElement) {
-        selectedSeatElement.remove(); // Xóa phần tử
+function removeSelectedSeat(seatName) {
+    var selectedSeatsList = document.getElementById('selectedSeatsList');
+    var existingSeats = selectedSeatsList.textContent;
+
+    // Tìm vị trí của tên ghế trong danh sách
+    var index = existingSeats.indexOf(seatName);
+    if (index !== -1) {
+        // Xóa tên ghế khỏi danh sách
+        var newSeats = existingSeats.slice(0, index) + existingSeats.slice(index + seatName.length); // Không cần thêm +2 vì không có dấu phẩy và khoảng trắng sau tên ghế
+        selectedSeatsList.textContent = newSeats;
     }
 }
-
-
-
 
        </script>
 
