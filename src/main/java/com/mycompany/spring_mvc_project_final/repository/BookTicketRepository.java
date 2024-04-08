@@ -19,7 +19,7 @@ public interface BookTicketRepository extends JpaRepository<BookTicket,Long> {
     List<Long> findSelectedSeats();
     Optional<BookTicket> findBySeatId(Long seatId);
     Optional<BookTicket> findFirstBySeatIdAndRoomIdAndShowTimeId(Long seatId, Long roomId, Long showTimeId);
-
+    List<BookTicket> findByUserId(Long userId);
 //    @Modifying
 //
 //    @Query("DELETE FROM BookTicket bt WHERE bt.seatId = :seatId")

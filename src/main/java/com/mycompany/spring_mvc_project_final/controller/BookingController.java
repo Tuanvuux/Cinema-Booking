@@ -46,7 +46,6 @@ public class BookingController {
     ShowTimeRepository showTimeRepository;
     @Autowired
     UserRepository userRepository;
-
     @RequestMapping(value = "/cinema",method = GET)
     public String showCinema(Model model){
         List<Cinema> cinemaList = (List<Cinema>) cinemaRepository.findAll();
@@ -288,15 +287,36 @@ public class BookingController {
         Optional<User> user = userRepository.findById(userId);
         Optional<Movie> movie = movieRepository.findById(movieId);
         Optional<ShowTime> showTime = showTimeRepository.findById(showTimeId);
+        List<BookTicket> bookTickets = bookTicketRepository.findByUserId(userId);
+
+        List<Long> SeatIds = new ArrayList<>(); // Mảng chứa các seatId
+
+        for (BookTicket bookTicket : bookTickets) {
+            SeatIds.add(bookTicket.getSeatId());
+        }
+        List<Seat> seats= seatRepository.findAllBySeatIdIn(SeatIds);
+        model.addAttribute("seats",seats);
         model.addAttribute("user", user);
         model.addAttribute("movie", movie);
         model.addAttribute("showTime", showTime);
         return "PaymentPage";
     }
 
-    @RequestMapping(value = "/paypal", method = RequestMethod.GET)
-    public String paypal(){
-        return "payment/index";
+    @RequestMapping(value = "/paypal", method = GET)
+    public String paypal(@RequestParam("total") int total, Model model) {
+        System.out.println("A");
+        // Đặt giá trị total vào model để truyền đến JSP
+        model.addAttribute("total", total);
+        return "paypal"; // Đảm bảo có một tệp JSP hoặc Thymeleaf tương ứng có tên "paypal"
+    }
+
+    @RequestMapping(value = "/paymentsuccess", method = GET)
+    public String payment(){
+        return "paymentsuccess";
+    }
+    @RequestMapping(value = "/paymenerror", method = GET)
+    public String paymenterror(){
+        return "PaymentPage";
     }
 
 
