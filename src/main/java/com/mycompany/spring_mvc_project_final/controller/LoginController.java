@@ -9,6 +9,7 @@ import com.mycompany.spring_mvc_project_final.entities.AccountEntity;
 import com.mycompany.spring_mvc_project_final.entities.Role;
 //import com.mycompany.spring_mvc_project_final.enums.UserStatus;
 import com.mycompany.spring_mvc_project_final.entities.User;
+import com.mycompany.spring_mvc_project_final.entities.UserRole;
 import com.mycompany.spring_mvc_project_final.enums.UserStatus;
 import com.mycompany.spring_mvc_project_final.repository.AccountRepository;
 import com.mycompany.spring_mvc_project_final.repository.RoleRepository;
@@ -147,10 +148,14 @@ public class LoginController {
         // Thiết lập trạng thái ACTIVE cho tài khoản
         AccountEntity accountEntity = AccountEntity.fromUser(user);
         accountEntity.setStatus(UserStatus.ACTIVE);
-
+        Role role = new Role();
+        role.setId(2); // Gán role_id = 2
+        // Gán vai trò cho tài khoản
+        Set<Role> roles = new HashSet<>();
+        roles.add(role);
+        accountEntity.setUserRoles(roles);
         // Lưu thông tin người dùng vào cơ sở dữ liệu
         userRepository.save(user);
-
         // Lưu thông tin tài khoản vào cơ sở dữ liệu
         accountRepository.save(accountEntity);
 

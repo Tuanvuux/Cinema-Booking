@@ -44,6 +44,8 @@ public class BookingController {
     MovieShowtimeRepository movieShowtimeRepository;
     @Autowired
     ShowTimeRepository showTimeRepository;
+    @Autowired
+    UserRepository userRepository;
 
     @RequestMapping(value = "/cinema",method = GET)
     public String showCinema(Model model){
@@ -239,7 +241,6 @@ public class BookingController {
         java.sql.Date sqlSelectedDate = java.sql.Date.valueOf(localDate);
 
         List<ShowTime> showTimes = showTimeRepository.findShowTimesByMovieIdAndShowDate(movieId, sqlSelectedDate);
-
         Movie movie = movieRepository.findByMovieId(movieId);
         List<Long> showtimeIds = new ArrayList<>();
         for (ShowTime showTime : showTimes) {
@@ -277,12 +278,17 @@ public class BookingController {
         return "BookingShowTime";
     }
 
-    @RequestMapping(value = "/payment", method = RequestMethod.GET)
-    public String payment(HttpSession session, Model model){
+    @GetMapping("/payment")
+    public String processPayment(HttpSession session, Model model) {
         Long movieId = (Long) session.getAttribute("movieId");
         Long showTimeId = (Long) session.getAttribute("showTimeId");
-        List<Long> ListIdSeat = (List<Long>) session.getAttribute("selectedSeatIds");
-        System.out.println("a");
+        Long userId = (Long) session.getAttribute("userId");
+        Optional<User> user = userRepository.findById(userId);
+        Optional<Movie> movie = movieRepository.findById(movieId);
+        Optional<ShowTime> showTime = showTimeRepository.findById(showTimeId);
+        model.addAttribute("user", user);
+        model.addAttribute("movie", movie);
+        model.addAttribute("showTime", showTime);
         return "PaymentPage";
     }
 

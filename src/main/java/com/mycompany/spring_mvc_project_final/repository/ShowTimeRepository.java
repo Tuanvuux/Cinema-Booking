@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface ShowTimeRepository extends JpaRepository<ShowTime, Long> {
 
-    @Query("SELECT s " +
+    @Query("SELECT  s " +
             "FROM ShowTime s " +
             "INNER JOIN s.movieShowtime ms " +
             "WHERE ms.movie.movieId = :movieId AND s.showDate = :showDate")
