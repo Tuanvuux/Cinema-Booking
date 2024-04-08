@@ -11,6 +11,8 @@ import java.util.List;
 @Repository
 public interface SeatRepository extends CrudRepository<Seat, Long> {
     List<Seat> findByRoom_RoomId(Long roomId);
+    List<Seat> findAllBySeatIdIn(List<Long> seatIds);
+
 
 }
 
