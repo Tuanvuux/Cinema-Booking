@@ -11,12 +11,16 @@
 <body>
 
 
-<label for="amount">Số tiền cần thanh toán:</label>
-<input class="form-control" type="text" id="amount" placeholder="Nhập số tiền" style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 10px;" value="${total}" readonly>
+<center>
+    <div style="margin-top: 200px;">
+        <label for="amount">Số tiền cần thanh toán:</label>
+        <input class="form-control" type="text" id="amount" placeholder="Nhập số tiền"
+        style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 10px;" value="${total}" readonly>
 
-
-    <!-- Nút thanh toán PayPal sẽ được render tại đây -->
-    <div id="paypal-button-container"></div>
+            <!-- Nút thanh toán PayPal sẽ được render tại đây -->
+            <div id="paypal-button-container" style="margin-left: 400px;"></div>
+    </div>
+</center>
 
     <script>
         paypal.Buttons({
