@@ -7,5 +7,6 @@ import java.sql.Date;
 import java.util.List;
 
 public interface MovieShowtimeRepository extends CrudRepository <MovieShowtime,Long> {
+    List<MovieShowtime> findAll();
 
 }

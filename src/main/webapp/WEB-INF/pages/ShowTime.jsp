@@ -1,138 +1,112 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <title>Show Time</title>
+    <jsp:include page="include/css-page.jsp" />
     <style>
         table {
             border-collapse: collapse;
         }
         th, td {
-            border: 1px solid black;
             padding: 8px;
             text-align: center;
         }
-        .day-button {
+        .day-button, .showtime-button {
             background-color: #f0f0f0;
             border: 1px solid #ccc;
             padding: 5px 10px;
             cursor: pointer;
         }
-        .day-button:hover {
-            background-color: #ddd;
+        .day-button:hover, .showtime-button:hover {
+            background-color: #8d0000;
+            color: white;
         }
-        .selected {
-            background-color: #007bff; /* Màu nền của nút khi được chọn */
-            color: #fff; /* Màu chữ của nút khi được chọn */
+        .day-button.selected {
+            background-color: #8d0000; /* Thay 'blue' bằng màu bạn muốn */
+            color: white; /* Thêm màu chữ tương thích */
         }
     </style>
 </head>
 <body>
+    <jsp:include page="include/header.jsp" />
+    <jsp:include page="include/header2.jsp" />
 
-    <h2>Chọn ngày chiếu</h2>
-    <table>
-        <thead>
-            <tr>
-                <c:forEach var="day" items="${daysOfWeek}">
-                    <td>${day}</td>
-                </c:forEach>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <c:forEach var="date" items="${dates}" varStatus="loop">
-                    <th>
-                        <button class="day-button" name="selectedDate" value="${date}" id="btn-${loop.index}" ${loop.index == 0 ? 'class="selected"' : ''}>
-                            ${date.split(' ')[0]}/${date.split(' ')[1]}
-                        </button>
-                    </th>
-                </c:forEach>
-            </tr>
-        </tbody>
-    </table>
- <table>
-     <thead>
-         <tr>
-             <th>Movie ID</th>
-             <th>Movie Name</th>
-             <!-- Add more headers as needed -->
-         </tr>
-     </thead>
-     <tbody id="showtimeTableBody">
-         <!-- Movie data will be inserted here -->
-     </tbody>
- </table>
+    <div class="ngaychieu" style="display: flex; flex-direction: column; margin: 20px 120px 50px 100px;">
+            <h2 style="color: #8d0000;">Chọn ngày chiếu</h2>
+            <div class="ngay" style="display: flex; justify-content: center;">
+                <form id="dateForm" action="/booking?movieId=${movie.movieId}" method="post">
+                    <!-- Địa chỉ endpoint của controller xử lý POST -->
+                    <table>
+                        <thead>
+                            <tr>
+                                <c:forEach var="day" items="${daysOfWeek}">
+                                    <td style="border: 1px solid black;">${day}</td>
+                                </c:forEach>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <c:forEach var="date" items="${dates}" varStatus="loop">
+                                    <th style="border: 1px solid black;">
+                                        <button type="submit" class="day-button" name="selectedDate" value="${date}"
+                                            onclick="toggleButtonColor(this)">
+                                            ${date.split(' ')[0]}/${date.split(' ')[1]}
+                                        </button>
+                                    </th>
+                                </c:forEach>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
+        <h2 style="margin-bottom:20px; color: #8d0000;">Chọn lịch chiếu</h2>
+<c:forEach items="${movies}" var="movie">
+    <div class="lichchieu" style="display: flex; margin: 20px 120px 50px 100px;">
+        <div class="left" style="display: flex; flex-direction: column; width: 20%; margin-bottom:20px;">
+            <div class="phim">
+                <h5 style="margin-bottom:20px; font-weight: bold;">Phim ${movie.movieName}</h5>
+                <img src="movie/getPhoto/<c:out value='${movie.movieId}'/>" style="width: 220px; height: 270px;">
+            </div>
+        </div>
 
-
-
-    <script>
-        // Lấy tất cả các nút
-        const buttons = document.querySelectorAll('.day-button');
-
-        // Lặp qua từng nút để thêm xử lý sự kiện click
-        buttons.forEach(button => {
-            button.addEventListener('click', function() {
-                // Xóa tất cả các lớp CSS 'selected' trên tất cả các nút
-                buttons.forEach(btn => {
-                    btn.classList.remove('selected');
-                });
-
-                // Thêm lớp CSS 'selected' cho nút được chọn
-                this.classList.add('selected');
-
-                // Gửi dữ liệu ngày được chọn đến controller
-                const selectedDate = this.value;
-                sendSelectedDate(selectedDate);
-            });
-        });
-
-        function sendSelectedDate(selectedDate) {
-            const xhr = new XMLHttpRequest();
-            xhr.open('POST', '/processSelectedDate');
-            xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                   console.log('Đã gửi ngày được chọn đến controller');
-                                  console.log(xhr.responseText);
-
-                                  // Parse JSON response
-                                  const movies = JSON.parse(xhr.responseText);
-
-                                  // Update HTML content with movie data
-                                  updateMovieTable(movies);
-                } else {
-                    console.error('Đã xảy ra lỗi khi gửi dữ liệu đến controller');
-                }
-            };
-            // Chuyển đổi ngày thành định dạng "yyyy-MM-dd" và gửi dưới dạng JSON
-            xhr.send(JSON.stringify({ selectedDate: selectedDate }));
-        }
+        <div class="right" style="display: flex; justify-content: center; width: 70%;">
+            <table>
+                <tr>
+                    <c:forEach items="${movieShowtime}" var="movieShowtime">
+                        <c:forEach items="${showTimes}" var="showTime">
+                            <c:forEach items="${roomShowTimes}" var="roomShowTime">
+                                <c:if test="${movieShowtime.movie.movieId eq movie.movieId and movieShowtime.showTime.showTimeId eq showTime.showTimeId and roomShowTime.showTime.showTimeId eq showTime.showTimeId}">
+                                    <td>${showTime.timeStart} - ${showTime.timeEnd}</td>
+                                    <td>${roomShowTime.room.roomId}</td>
+                                </c:if>
+                            </c:forEach>
+                        </c:forEach>
+                    </c:forEach>
+                </tr>
+            </table>
+        </div>
+    </div>
+</c:forEach>
 
 
- function updateMovieTable(movies) {
-        const showtimeTableBody = document.getElementById('showtimeTableBody');
-        showtimeTableBody.innerHTML = ''; // Clear existing content
-
-        // Add new movie data
-        movies.forEach(function(movie) {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${movie.movieId}</td>
-                <td>${movie.movieName}</td>
-                <!-- Add more columns as needed -->
-            `;
-            showtimeTableBody.appendChild(row);
-        });
-    }
-    </script>
-
-    <script>
-        // Tự động chọn nút của ngày hiện tại khi trang được tải
-        window.onload = function() {
-            document.getElementById('btn-0').click();
-        };
-    </script>
+    <jsp:include page="include/footer.jsp" />
 </body>
+<script>
+    function toggleButtonColor(button) {
+        // Loại bỏ lớp 'selected' khỏi tất cả các nút
+        var buttons = document.querySelectorAll('.day-button');
+        buttons.forEach(function(btn) {
+            btn.classList.remove('selected');
+        });
+
+        // Thêm lớp 'selected' cho nút được nhấn
+        button.classList.add('selected');
+    }
+</script>
+
 </html>

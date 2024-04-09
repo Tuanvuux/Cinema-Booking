@@ -32,6 +32,17 @@ public class BookTicket {
     @Column
     private Long userId;
 
+    @Column
+    private Long movieId;
+
+    public Long getMovieId() {
+        return movieId;
+    }
+
+    public void setMovieId(Long movieId) {
+        this.movieId = movieId;
+    }
+
     public Long getUserId() {
         return userId;
     }

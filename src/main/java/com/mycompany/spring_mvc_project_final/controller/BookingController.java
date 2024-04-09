@@ -68,7 +68,7 @@ public class BookingController {
                            HttpServletRequest request, Model model) {
         // Lấy session từ request
         HttpSession session = request.getSession();
-
+        Long movieId = (Long) session.getAttribute("movieId");
         // Lưu giá trị roomId và showTimeId vào session
         session.setAttribute("roomId", roomId);
         session.setAttribute("showTimeId", showTimeId);
@@ -78,7 +78,7 @@ public class BookingController {
         // Lặp qua danh sách ghế
         for (Seat seat : seatList) {
             // Kiểm tra xem ghế có trong bảng bookticket hay không
-            Optional<BookTicket> optionalBookTicket = bookTicketRepository.findFirstBySeatIdAndRoomIdAndShowTimeId(seat.getSeatId(), roomId, showTimeId);
+            Optional<BookTicket> optionalBookTicket = bookTicketRepository.findFirstBySeatIdAndRoomIdAndShowTimeIdAndMovieId(seat.getSeatId(), roomId, showTimeId, movieId );
 
             BookTicket bookTicket = optionalBookTicket.orElse(null);
 
@@ -122,6 +122,8 @@ public class BookingController {
         Long roomId = (Long) session.getAttribute("roomId");
         Long showTimeId = (Long) session.getAttribute("showTimeId");
         Long userId = (Long) session.getAttribute("userId");
+        Long movieId = (Long) session.getAttribute("movieId");
+
         try {
             // Kiểm tra xem seatIdRequest có rỗng không
             if (seatIdRequest.isEmpty()) {
@@ -151,6 +153,7 @@ public class BookingController {
                 bookTicket.setShowTimeId(showTimeId);
                 bookTicket.setRoomId(roomId);
                 bookTicket.setUserId(userId);
+                bookTicket.setMovieId(movieId);
                 bookTicket.setStatus("1");
                 System.out.println("a");
 

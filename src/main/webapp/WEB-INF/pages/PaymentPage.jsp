@@ -73,17 +73,6 @@ li {
     margin-bottom: 5px;
 }
 
-button {
-    background-color: #000;
-    color: #fff;
-    font-size: 16px;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-    display: block;
-    margin: 0 auto;
-    margin-top: 20px;
-}
 
 button:hover {
     background-color: #333;
@@ -123,9 +112,19 @@ button:hover {
                     <li>Tổng tiền: ${seats.size() * 60000}</li>
                 </ul>
             </div>
-            <button type="submit">Tiếp tục</button>
+     <a href="/paypal?total=${seats.size() * 60000}" style="max-width: 90px;
+     text-decoration: none;
+     background-color: #000;
+     color: #fff;
+     font-size: 16px;
+     padding: 10px 20px;
+     border: none;
+     cursor: pointer;
+     display: block;
+     margin: 0 auto;
+     margin-top: 20px;">Thanh toán</a>
         </form>
-          <a href="/paypal?total=${seats.size() * 60000}">Thanh toán</a>
+<br>
     </div>
       <jsp:include page="include/footer.jsp" />
 </body>
