@@ -1,5 +1,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -92,7 +95,7 @@ button:hover {
     <jsp:include page="include/header2.jsp" />
     <div class="container">
         <h1>Phương thức thanh toán</h1>
-        <form action="#">
+        <form action="paypal">
             <div class="thanh-toan">
                 <input type="radio" id="metiz" name="phuong-thuc" value="metiz" checked>
                 <label for="metiz">Thanh toán bằng Paypal</label>
@@ -110,16 +113,19 @@ button:hover {
             <div class="noi-dung-thanh-toan">
                 <h2>Nội dung thanh toán</h2>
                 <ul>
-                  <li>Phim: ${movie.get().movieName}</li>
+                    <li>Phim: ${movie.isPresent() ? movie.get().movieName : 'Unknown'}</li>
                     <li>Ngày: <fmt:formatDate pattern="dd/MM/yyyy" value="${showTime.get().showDate}" /></li>
-                    <li>Thời gian: ${showTime.get().timeStart} - ${showTime.get().timeEnd}</li>
-                    <li>Ghế:</li>
-                    <li>Số vé:</li>
-                    <li>Tổng tiền:</li>
+                    <li>Thời gian: ${showTime.isPresent() ? showTime.get().timeStart : 'Unknown'} - ${showTime.isPresent() ? showTime.get().timeEnd : 'Unknown'}</li>
+                    <li>Ghế:<c:forEach items="${seats}" var="seat">
+                                    <c:out value="${seat.getSeatName()}"/>
+                                </c:forEach></li>
+                    <li>Số vé: ${seats.size()}</li>
+                    <li>Tổng tiền: ${seats.size() * 60000}</li>
                 </ul>
             </div>
             <button type="submit">Tiếp tục</button>
         </form>
+          <a href="/paypal?total=${seats.size() * 60000}">Thanh toán</a>
     </div>
       <jsp:include page="include/footer.jsp" />
 </body>
