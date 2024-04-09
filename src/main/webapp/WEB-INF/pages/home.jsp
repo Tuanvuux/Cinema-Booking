@@ -55,10 +55,14 @@
 <body style="background-color: #f2f5fb">
     <jsp:include page="include/header.jsp" />
     <jsp:include page="include/header2.jsp" />
-
+    <img src="../../resources/img/cinema/cbo.png" style="width: 100%; height: 400px;">
     <div class="film" style=" display: flex;flex-wrap: wrap;">
+
         <div style="width: 10%;"></div>
+
         <div class="main-home" style="width: 80%; margin-left: 100px;">
+
+        <br>
             <div style="margin: 0 auto;">
                 <div style="display: flex; flex-wrap: wrap;">
                     <c:forEach var="movie" items="${movieList}">
