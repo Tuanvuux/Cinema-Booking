@@ -9,12 +9,12 @@ import com.mycompany.spring_mvc_project_final.entities.AccountEntity;
 import com.mycompany.spring_mvc_project_final.entities.Role;
 //import com.mycompany.spring_mvc_project_final.enums.UserStatus;
 import com.mycompany.spring_mvc_project_final.entities.User;
-import com.mycompany.spring_mvc_project_final.entities.UserRole;
 import com.mycompany.spring_mvc_project_final.enums.UserStatus;
 import com.mycompany.spring_mvc_project_final.repository.AccountRepository;
 import com.mycompany.spring_mvc_project_final.repository.RoleRepository;
 import com.mycompany.spring_mvc_project_final.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -39,6 +39,9 @@ public class LoginController {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    private JavaMailSender mailSender;
+
     @RequestMapping("/login")
     public String loginPage(Model model, @RequestParam(value = "error", required = false) boolean error) {
 
@@ -47,6 +50,7 @@ public class LoginController {
         }
         return "login";
     }
+
     @RequestMapping("/admin/home")
     public String viewHome(Model model) {
 
@@ -61,9 +65,10 @@ public class LoginController {
     }
 
     @GetMapping(value = "/admin/add")
-    public String addAccount(){
+    public String addAccount() {
         return "/admin/add";
     }
+
     @PostMapping(value = "/admin/add")
     public String addAccount(@RequestParam("email") String email,
                              @RequestParam("password") String password,
@@ -103,7 +108,6 @@ public class LoginController {
     }
 
 
-
     @RequestMapping("/user/home")
     public String viewHome(Model model, HttpSession session) {
 
@@ -125,7 +129,7 @@ public class LoginController {
     }
 
     @RequestMapping(value = {"/test2"}, method = RequestMethod.GET)
-    public String welcomePage44 (Model model) {
+    public String welcomePage44(Model model) {
         return "home";
     }
 

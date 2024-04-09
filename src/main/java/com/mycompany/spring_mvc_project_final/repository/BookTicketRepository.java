@@ -22,6 +22,7 @@ public interface BookTicketRepository extends JpaRepository<BookTicket,Long> {
     @Query("SELECT bt FROM BookTicket bt WHERE bt.userId = :userId AND bt.showTimeId = :showTimeId AND bt.movieId = :movieId AND bt.roomId = :roomId")
     List<BookTicket> findByUserIdAndShowTimeIdAndMovieIdAndRoomId(@Param("userId") Long userId, @Param("showTimeId") Long showTimeId, @Param("movieId") Long movieId, @Param("roomId") Long roomId);
 
+    Optional<BookTicket> findBySeatIdAndShowTimeIdAndMovieIdAndRoomIdAndStatus(Long seatId, Long showTimeId, Long movieId, Long roomId, String status);
 //    @Modifying
 //
 //    @Query("DELETE FROM BookTicket bt WHERE bt.seatId = :seatId")

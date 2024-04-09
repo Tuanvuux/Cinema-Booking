@@ -14,6 +14,8 @@ public interface SeatRepository extends CrudRepository<Seat, Long> {
     List<Seat> findAllBySeatIdIn(List<Long> seatIds);
 
 
+
+
 }
 
 

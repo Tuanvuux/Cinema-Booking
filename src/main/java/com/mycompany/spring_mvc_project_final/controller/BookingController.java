@@ -46,6 +46,7 @@ public class BookingController {
     ShowTimeRepository showTimeRepository;
     @Autowired
     UserRepository userRepository;
+
     @RequestMapping(value = "/cinema",method = GET)
     public String showCinema(Model model){
         List<Cinema> cinemaList = (List<Cinema>) cinemaRepository.findAll();
@@ -118,6 +119,7 @@ public class BookingController {
         // Lưu giá trị roomId và showTimeId vào session
         session.setAttribute("roomId", roomId);
         session.setAttribute("showTimeId", showTimeId);
+
         // Lấy danh sách ghế từ bảng seat
         List<Seat> seatList = (List<Seat>) seatRepository.findByRoom_RoomId(roomId);
 
@@ -222,6 +224,8 @@ public class BookingController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
+
+
 
     @RequestMapping(value = "/booking", method = GET)
     public String handleBooking(@RequestParam("movieId") Long movieId, Model model, HttpSession session) {
@@ -337,20 +341,31 @@ public class BookingController {
         Optional<User> user = userRepository.findById(userId);
         Optional<Movie> movie = movieRepository.findById(movieId);
         Optional<ShowTime> showTime = showTimeRepository.findById(showTimeId);
-        List<BookTicket> bookTickets = bookTicketRepository.findByUserIdAndShowTimeIdAndMovieIdAndRoomId(userId,showTimeId,movieId,roomId);
+        List<BookTicket> bookTickets = bookTicketRepository.findByUserIdAndShowTimeIdAndMovieIdAndRoomId(userId, showTimeId, movieId, roomId);
 
-        List<Long> SeatIds = new ArrayList<>(); // Mảng chứa các seatId
+        List<Long> seatIds = new ArrayList<>(); // Mảng chứa các seatId
 
         for (BookTicket bookTicket : bookTickets) {
-            SeatIds.add(bookTicket.getSeatId());
+            seatIds.add(bookTicket.getSeatId());
         }
-        List<Seat> seats= seatRepository.findAllBySeatIdIn(SeatIds);
-        model.addAttribute("seats",seats);
+
+        // Cập nhật trạng thái ghế từ 1 thành 2
+        for (Long seatId : seatIds) {
+            Optional<BookTicket> bookTicket = bookTicketRepository.findBySeatIdAndShowTimeIdAndMovieIdAndRoomIdAndStatus(seatId, showTimeId, movieId, roomId, "1");
+            if (bookTicket.isPresent()) {
+                bookTicket.get().setStatus("2");
+                bookTicketRepository.save(bookTicket.get());
+            }
+        }
+
+        List<Seat> seats = seatRepository.findAllBySeatIdIn(seatIds);
+        model.addAttribute("seats", seats);
         model.addAttribute("user", user);
         model.addAttribute("movie", movie);
         model.addAttribute("showTime", showTime);
         return "PaymentPage";
     }
+
 
     @RequestMapping(value = "/paypal", method = GET)
     public String paypal(@RequestParam("total") int total, Model model) {
