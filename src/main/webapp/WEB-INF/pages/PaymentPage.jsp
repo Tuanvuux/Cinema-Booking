@@ -9,13 +9,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thanh toán</title>
-    <link rel="stylesheet" href="style.css">
+    <jsp:include page="include/css-page.jsp" />
 </head>
 <style>
   body {
     font-family: Arial, sans-serif;
     margin: 0;
-    padding: 20px;
 }
 
 h1 {
@@ -82,8 +81,8 @@ button:hover {
 <body>
   <jsp:include page="include/header.jsp" />
     <jsp:include page="include/header2.jsp" />
-    <div class="container">
-        <h1>Phương thức thanh toán</h1>
+    <div class="container" style="margin-top: 50px; ">
+        <h1 style=" background-color: #8d0000; color: white;">Phương thức thanh toán</h1>
         <form action="paypal">
             <div class="thanh-toan">
                 <input type="radio" id="metiz" name="phuong-thuc" value="metiz" checked>
@@ -100,29 +99,30 @@ button:hover {
                 <label for="internet-banking">Thanh toán qua Internet Banking/VISA</label>
             </div>
             <div class="noi-dung-thanh-toan">
-                <h2>Nội dung thanh toán</h2>
-                <ul>
-                    <li>Phim: ${movie.isPresent() ? movie.get().movieName : 'Unknown'}</li>
-                    <li>Ngày: <fmt:formatDate pattern="dd/MM/yyyy" value="${showTime.get().showDate}" /></li>
-                    <li>Thời gian: ${showTime.isPresent() ? showTime.get().timeStart : 'Unknown'} - ${showTime.isPresent() ? showTime.get().timeEnd : 'Unknown'}</li>
-                    <li>Ghế:<c:forEach items="${seats}" var="seat">
+                <h2 style="margin-left: 10px;">Nội dung thanh toán</h2>
+                <ul style="margin-left: 50px;">
+                    <li><b>Phim:</b> ${movie.isPresent() ? movie.get().movieName : 'Unknown'}</li>
+                    <li><b>Ngày:</b> <fmt:formatDate pattern="dd/MM/yyyy" value="${showTime.get().showDate}" /></li>
+                    <li><b>Thời gian:</b> ${showTime.isPresent() ? showTime.get().timeStart : 'Unknown'} - ${showTime.isPresent() ? showTime.get().timeEnd : 'Unknown'}</li>
+                    <li><b>Ghế:</b><c:forEach items="${seats}" var="seat">
                                     <c:out value="${seat.getSeatName()}"/>
                                 </c:forEach></li>
-                    <li>Số vé: ${seats.size()}</li>
-                    <li>Tổng tiền: ${seats.size() * 60000}</li>
+                    <li><b>Số vé:</b> ${seats.size()}</li>
+                    <li><b>Tổng tiền:</b> ${seats.size() * 60000}</li>
                 </ul>
             </div>
-     <a href="/paypal?total=${seats.size() * 60000}" style="max-width: 90px;
+     <a href="/paypal?total=${seats.size() * 60000}" style="max-width: 150px;
      text-decoration: none;
-     background-color: #000;
+     background-color: #8d0000;
      color: #fff;
-     font-size: 16px;
+     font-weight: bold;
+     font-size: 18px;
      padding: 10px 20px;
      border: none;
      cursor: pointer;
      display: block;
      margin: 0 auto;
-     margin-top: 20px;">Thanh toán</a>
+     margin-top: 20px;"><center>Thanh toán</center></a>
         </form>
 <br>
     </div>
