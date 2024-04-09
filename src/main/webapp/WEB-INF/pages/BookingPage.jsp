@@ -132,7 +132,7 @@
 
             // Thêm dấu phẩy nếu danh sách không trống
             if (existingSeats !== "") {
-                existingSeats += ", ";
+                existingSeats += " ";
             }
 
             // Thêm tên ghế mới vào danh sách
