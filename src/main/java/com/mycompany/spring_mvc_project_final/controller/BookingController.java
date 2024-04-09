@@ -62,11 +62,12 @@ public class BookingController {
         return "Room";
     }
     @GetMapping(value = "/seat")
-    public String bookSeatget(HttpServletRequest request, Model model) {
+    public String bookSeatget(@RequestParam("movieId") Long movieId,
+                                  HttpServletRequest request, Model model) {
         // Lấy session từ request
         HttpSession session = request.getSession();
 
-        Long movieId=4L;
+
         Long showTimeId=1L;
         Long roomId=1L;
         // Lưu giá trị roomId và showTimeId vào session
@@ -332,10 +333,11 @@ public class BookingController {
         Long movieId = (Long) session.getAttribute("movieId");
         Long showTimeId = (Long) session.getAttribute("showTimeId");
         Long userId = (Long) session.getAttribute("userId");
+        Long roomId = (Long) session.getAttribute("roomId");
         Optional<User> user = userRepository.findById(userId);
         Optional<Movie> movie = movieRepository.findById(movieId);
         Optional<ShowTime> showTime = showTimeRepository.findById(showTimeId);
-        List<BookTicket> bookTickets = bookTicketRepository.findByUserId(userId);
+        List<BookTicket> bookTickets = bookTicketRepository.findByUserIdAndShowTimeIdAndMovieIdAndRoomId(userId,showTimeId,movieId,roomId);
 
         List<Long> SeatIds = new ArrayList<>(); // Mảng chứa các seatId
 
