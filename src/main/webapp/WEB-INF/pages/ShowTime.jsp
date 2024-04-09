@@ -81,8 +81,8 @@
                         <c:forEach items="${showTimes}" var="showTime">
                             <c:forEach items="${roomShowTimes}" var="roomShowTime">
                                 <c:if test="${movieShowtime.movie.movieId eq movie.movieId and movieShowtime.showTime.showTimeId eq showTime.showTimeId and roomShowTime.showTime.showTimeId eq showTime.showTimeId}">
-                                    <td>${showTime.timeStart} - ${showTime.timeEnd}</td>
-                                    <td>${roomShowTime.room.roomId}</td>
+                                   <td><a href="/seat"> ${showTime.timeStart} - ${showTime.timeEnd}<br>${roomShowTime.room.roomId}</a></td>
+
                                 </c:if>
                             </c:forEach>
                         </c:forEach>

@@ -61,6 +61,51 @@ public class BookingController {
         model.addAttribute("roomList", roomList);
         return "Room";
     }
+    @GetMapping(value = "/seat")
+    public String bookSeatget(HttpServletRequest request, Model model) {
+        // Lấy session từ request
+        HttpSession session = request.getSession();
+
+        Long movieId=4L;
+        Long showTimeId=1L;
+        Long roomId=1L;
+        // Lưu giá trị roomId và showTimeId vào session
+        session.setAttribute("roomId", roomId);
+        session.setAttribute("showTimeId", showTimeId);
+        session.setAttribute("movieId", movieId);
+        // Lấy danh sách ghế từ bảng seat
+        List<Seat> seatList = (List<Seat>) seatRepository.findByRoom_RoomId(roomId);
+
+        // Lặp qua danh sách ghế
+        for (Seat seat : seatList) {
+            // Kiểm tra xem ghế có trong bảng bookticket hay không
+            Optional<BookTicket> optionalBookTicket = bookTicketRepository.findFirstBySeatIdAndRoomIdAndShowTimeIdAndMovieId(seat.getSeatId(), roomId, showTimeId, movieId );
+
+            BookTicket bookTicket = optionalBookTicket.orElse(null);
+
+            if (bookTicket != null) {
+                // Nếu ghế có trong bảng bookticket
+                if ("1".equals(bookTicket.getStatus())) {
+                    // Trạng thái 1: Ghế đã được chọn
+                    seat.setStatus("1");
+                } else if ("2".equals(bookTicket.getStatus())) {
+                    // Trạng thái 2: Ghế đã được đặt
+                    seat.setStatus("2");
+                }
+            }
+        }
+
+        // Truyền danh sách ghế đã được cập nhật vào model
+        model.addAttribute("seatList", seatList);
+
+        // Truyền danh sách các ghế đã chọn vào model
+        List<Long> selectedSeats = getSelectedSeatIds(seatList);
+        model.addAttribute("selectedSeats", selectedSeats);
+
+        return "BookingPage";
+    }
+
+
 
     @PostMapping(value = "/seat")
     public String bookSeat(@RequestParam("roomId") Long roomId,
