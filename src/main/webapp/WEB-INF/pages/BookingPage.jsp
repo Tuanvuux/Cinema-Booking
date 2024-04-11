@@ -62,7 +62,9 @@
                                     ${seat.seatName}</div>
                             </c:when>
                             <c:when test="${seat.status eq '2'}">
-                                <div class="seat booked" id="seat_${seat.seatId}">${seat.seatName}</div>
+                                <div class="seat booked" id="seat_${seat.seatId}">
+                                    ${seat.seatName}
+                                </div>
                             </c:when>
                             <c:otherwise>
                                 <div class="seat" id="seat_${seat.seatId}"

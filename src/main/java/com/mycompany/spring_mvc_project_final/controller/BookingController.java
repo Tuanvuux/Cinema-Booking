@@ -139,11 +139,12 @@ public class BookingController {
                 if ("1".equals(bookTicket.getStatus())) {
                     // Trạng thái 1: Ghế đã được chọn
                     seat.setStatus("1");
-                } else if ("2".equals(bookTicket.getStatus())) {
-                    // Trạng thái 2: Ghế đã được đặt
+                } else if ("2".equals(bookTicket.getStatus()) || "3".equals(bookTicket.getStatus())) {
+                    // Trạng thái 2 hoặc 3: Ghế đã được đặt
                     seat.setStatus("2");
                 }
             }
+
         }
 
         // Truyền danh sách ghế đã được cập nhật vào model
@@ -345,8 +346,8 @@ public class BookingController {
         Optional<User> user = userRepository.findById(userId);
         Optional<Movie> movie = movieRepository.findById(movieId);
         Optional<ShowTime> showTime = showTimeRepository.findById(showTimeId);
-        List<BookTicket> bookTickets = bookTicketRepository.findByUserIdAndShowTimeIdAndMovieIdAndRoomId(userId, showTimeId, movieId, roomId);
 
+        List<BookTicket> bookTickets = bookTicketRepository.findByUserIdAndShowTimeIdAndMovieIdAndRoomId(userId, showTimeId, movieId, roomId);
         List<Long> seatIds = new ArrayList<>(); // Mảng chứa các seatId
 
         for (BookTicket bookTicket : bookTickets) {
@@ -355,11 +356,13 @@ public class BookingController {
 
         // Cập nhật trạng thái ghế từ 1 thành 2
         for (Long seatId : seatIds) {
-            Optional<BookTicket> bookTicket = bookTicketRepository.findBySeatIdAndShowTimeIdAndMovieIdAndRoomIdAndStatus(seatId, showTimeId, movieId, roomId, "1");
-            if (bookTicket.isPresent()) {
-                bookTicket.get().setStatus("2");
-                bookTicketRepository.save(bookTicket.get());
+            List<BookTicket> listBookTickets= bookTicketRepository.findBySeatIdAndShowTimeIdAndMovieIdAndRoomIdAndStatus(seatId, showTimeId, movieId, roomId, "1");
+            for(BookTicket bookTicket: listBookTickets)
+            {
+                bookTicket.setStatus("2");
+                bookTicketRepository.save(bookTicket);
             }
+
         }
 
         List<Seat> seats = seatRepository.findAllBySeatIdIn(seatIds);
@@ -395,7 +398,26 @@ public class BookingController {
         User user = userOptional.get();
 
         // Lấy thông tin vé từ cơ sở dữ liệu
-        List<BookTicket> bookTickets = bookTicketRepository.findByUserIdAndShowTimeIdAndMovieIdAndRoomId(userId, showTimeId, movieId, roomId);
+        List<BookTicket> bookTickets = bookTicketRepository.findBySeatIdAndShowTimeIdAndMovieIdAndRoomIdAndStatus(userId, showTimeId, movieId, roomId,"2");
+
+        List<BookTicket> ListBookTicket = bookTicketRepository.findByUserIdAndShowTimeIdAndMovieIdAndRoomId(userId, showTimeId, movieId, roomId);
+        List<Long> seatIds = new ArrayList<>(); // Mảng chứa các seatId
+
+        for (BookTicket bookTicket : ListBookTicket) {
+            seatIds.add(bookTicket.getSeatId());
+        }
+
+        // Cập nhật trạng thái ghế từ 1 thành 2
+        for (Long seatId : seatIds) {
+            List<BookTicket> listBookTickets= bookTicketRepository.findBySeatIdAndShowTimeIdAndMovieIdAndRoomIdAndStatus(seatId, showTimeId, movieId, roomId, "2");
+            for(BookTicket bookTicket: listBookTickets)
+            {
+                bookTicket.setStatus("3");
+                bookTicketRepository.save(bookTicket);
+            }
+
+        }
+
 
         // Tạo nội dung email
         StringBuilder emailContent = new StringBuilder();
