@@ -7,10 +7,14 @@ import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
@@ -46,6 +50,8 @@ public class BookingController {
     ShowTimeRepository showTimeRepository;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    private JavaMailSender mailSender;
 
     @RequestMapping(value = "/cinema",method = GET)
     public String showCinema(Model model){
@@ -376,13 +382,61 @@ public class BookingController {
     }
 
     @RequestMapping(value = "/paymentsuccess", method = GET)
-    public String payment(){
-        return "paymentsuccess";
+    public String payment(HttpSession session){
+        // Lấy thông tin từ session
+        Long userId = (Long) session.getAttribute("userId");
+        Long movieId = (Long) session.getAttribute("movieId");
+        Long showTimeId = (Long) session.getAttribute("showTimeId");
+        Long roomId = (Long) session.getAttribute("roomId");
+
+        // Tìm thông tin người dùng từ cơ sở dữ liệu
+        Optional<User> userOptional = userRepository.findById(userId);
+        if (!userOptional.isPresent()) {
+            return "redirect:/paymenterror"; // Nếu không tìm thấy người dùng, chuyển hướng đến trang lỗi
+        }
+        User user = userOptional.get();
+
+        // Lấy thông tin vé từ cơ sở dữ liệu
+        List<BookTicket> bookTickets = bookTicketRepository.findByUserIdAndShowTimeIdAndMovieIdAndRoomId(userId, showTimeId, movieId, roomId);
+
+        // Tạo nội dung email
+        StringBuilder emailContent = new StringBuilder();
+//        emailContent.append("Chúc mừng bạn đã đặt vé thành công.\n\n");
+        emailContent.append("Chúc mừng ").append(userRepository.findById(userId).orElse(new User()).getLastName()).append(" đã đặt vé thành công\n");
+        emailContent.append("Thông tin vé:\n");
+        for (BookTicket bookTicket : bookTickets) {
+            emailContent.append("- Ghế số: ").append(bookTicket.getSeatId()).append("\n");
+        }
+        emailContent.append("Tên phim: ").append(movieRepository.findById(movieId).orElse(new Movie()).getMovieName()).append("\n");
+        emailContent.append("Suất chiếu: ");
+        emailContent.append(" từ: ").append(showTimeRepository.findById(showTimeId).orElse(new ShowTime()).getTimeStart());
+        emailContent.append(" đến: ").append(showTimeRepository.findById(showTimeId).orElse(new ShowTime()).getTimeEnd());
+        emailContent.append(" ngày: ").append(showTimeRepository.findById(showTimeId).orElse(new ShowTime()).getShowDate());
+        emailContent.append("\n");
+        emailContent.append("Phòng chiếu: ").append(roomId).append("\n");
+        emailContent.append("\nCảm ơn bạn đã lựa chọn DoubleT. Chúc bạn có một trải nghiệm thú vị khi xem phim!");
+
+        // Tạo và gửi email
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+        try {
+            helper.setTo(user.getEmail());
+            helper.setSubject("Xác nhận đặt vé thành công");
+            helper.setText(emailContent.toString());
+            mailSender.send(message);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            // Xử lý lỗi gửi email (nếu cần)
+            return "redirect:/paymenterror";
+        }
+
+        return "paymentsuccess"; // Trả về trang thành công
+
     }
-    @RequestMapping(value = "/paymenerror", method = GET)
-    public String paymenterror(){
-        return "PaymentPage";
-    }
+//    @RequestMapping(value = "/paymenerror", method = GET)
+//    public String paymenterror(){
+//        return "PaymentPage";
+//    }
 
 
 }
