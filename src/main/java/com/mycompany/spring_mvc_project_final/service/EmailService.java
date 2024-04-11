@@ -18,12 +18,12 @@ public class EmailService {
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
         try {
             helper.setTo(recipientEmail);
-            helper.setSubject("Your Registration Token");
-            helper.setText("Dear User,\n\n"
-                    + "Please use the following token to complete your registration:\n\n"
+            helper.setSubject("Mã xác thực của bạn");
+            helper.setText("DGửi User,\n\n"
+                    + "Vui lòng sử dụng mã xác thực để hoàn tất thủ tục đăng ký tài khoản trên DoubleT:\n\n"
                     + token + "\n\n"
-                    + "This token is valid for 12 hours.\n\n"
-                    + "Best regards,\nYour Application Team");
+                    + "Mã xác thực chỉ có hạn trong vòng 12 giờ.\n\n"
+                    + "Trân trọng,\nDoubleT Cinema Booking Online");
 
             mailSender.send(mimeMessage);
 
