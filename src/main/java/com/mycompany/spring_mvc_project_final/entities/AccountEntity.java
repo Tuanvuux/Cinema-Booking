@@ -8,6 +8,7 @@ package com.mycompany.spring_mvc_project_final.entities;
 import com.mycompany.spring_mvc_project_final.enums.UserStatus;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -37,6 +38,28 @@ public class AccountEntity implements Serializable {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private UserStatus status;
+
+    @Column(length = 6)
+    private String token;
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public LocalDateTime getTokenExpiration() {
+        return tokenExpiration;
+    }
+
+    public void setTokenExpiration(LocalDateTime tokenExpiration) {
+        this.tokenExpiration = tokenExpiration;
+    }
+
+    @Column(name = "token_expiration")
+    private LocalDateTime tokenExpiration;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "account_role",

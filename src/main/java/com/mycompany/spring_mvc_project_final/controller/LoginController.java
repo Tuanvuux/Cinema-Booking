@@ -13,6 +13,7 @@ import com.mycompany.spring_mvc_project_final.enums.UserStatus;
 import com.mycompany.spring_mvc_project_final.repository.AccountRepository;
 import com.mycompany.spring_mvc_project_final.repository.RoleRepository;
 import com.mycompany.spring_mvc_project_final.repository.UserRepository;
+import com.mycompany.spring_mvc_project_final.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,11 +22,15 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Controller
 public class LoginController {
@@ -41,6 +46,8 @@ public class LoginController {
 
     @Autowired
     private JavaMailSender mailSender;
+    @Autowired
+    EmailService emailService;
 
     @RequestMapping("/login")
     public String loginPage(Model model, @RequestParam(value = "error", required = false) boolean error) {
@@ -139,8 +146,38 @@ public class LoginController {
         return "register";
     }
 
+//    @PostMapping("/register")
+//    public String registerUser(@ModelAttribute("user") User user) {
+//        // Kiểm tra xem email đã được sử dụng chưa
+//        if (userRepository.existsByEmail(user.getEmail())) {
+//            return "redirect:/register?error"; // Đã tồn tại email trong hệ thống
+//        }
+//
+//        // Mã hóa mật khẩu trước khi lưu vào cơ sở dữ liệu
+//        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+//
+//        // Thiết lập trạng thái ACTIVE cho tài khoản
+//        AccountEntity accountEntity = AccountEntity.fromUser(user);
+//        accountEntity.setStatus(UserStatus.ACTIVE);
+//        Role role = new Role();
+//        role.setId(2); // Gán role_id = 2
+//        // Gán vai trò cho tài khoản
+//        Set<Role> roles = new HashSet<>();
+//        roles.add(role);
+//        accountEntity.setUserRoles(roles);
+//        // Lưu thông tin người dùng vào cơ sở dữ liệu
+//        userRepository.save(user);
+//        // Lưu thông tin tài khoản vào cơ sở dữ liệu
+//        accountRepository.save(accountEntity);
+//
+//        return "redirect:/login"; // Đăng ký thành công, chuyển hướng đến trang đăng nhập
+//    }
+
     @PostMapping("/register")
-    public String registerUser(@ModelAttribute("user") User user) {
+    public String registerUser(@ModelAttribute("user") User user, HttpServletRequest request) {
+        // Thay thế bằng cách sau:
+        // Thêm các tham số cần thiết vào phương thức registerUser, Spring MVC sẽ tự động cung cấp giá trị cho chúng
+
         // Kiểm tra xem email đã được sử dụng chưa
         if (userRepository.existsByEmail(user.getEmail())) {
             return "redirect:/register?error"; // Đã tồn tại email trong hệ thống
@@ -149,21 +186,69 @@ public class LoginController {
         // Mã hóa mật khẩu trước khi lưu vào cơ sở dữ liệu
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 
-        // Thiết lập trạng thái ACTIVE cho tài khoản
+        // Thiết lập trạng thái UNACTIVE cho tài khoản
         AccountEntity accountEntity = AccountEntity.fromUser(user);
-        accountEntity.setStatus(UserStatus.ACTIVE);
+        accountEntity.setStatus(UserStatus.UNACTIVE);
         Role role = new Role();
         role.setId(2); // Gán role_id = 2
         // Gán vai trò cho tài khoản
         Set<Role> roles = new HashSet<>();
         roles.add(role);
         accountEntity.setUserRoles(roles);
+
+        // Tạo và lưu token vào cơ sở dữ liệu
+        String token = generateRandomToken();
+        accountEntity.setToken(token);
+        LocalDateTime expirationTime = LocalDateTime.now().plusHours(12); // Thời gian hết hạn là 12 giờ sau
+        accountEntity.setTokenExpiration(expirationTime);
+
         // Lưu thông tin người dùng vào cơ sở dữ liệu
         userRepository.save(user);
         // Lưu thông tin tài khoản vào cơ sở dữ liệu
         accountRepository.save(accountEntity);
 
-        return "redirect:/login"; // Đăng ký thành công, chuyển hướng đến trang đăng nhập
+        // Gửi email chứa token đến người dùng
+        String appUrl = request.getScheme() + "://" + request.getServerName();
+        emailService.sendTokenEmail(user.getEmail(), token, appUrl);
+
+        return "redirect:/token?email=" + user.getEmail(); // Chuyển hướng đến trang nhập token
+    }
+
+    @GetMapping("/token")
+    public String tokenPage(@RequestParam("email") String email, Model model) {
+        // Sử dụng email để hiển thị hoặc thực hiện các thao tác khác
+        model.addAttribute("email", email);
+        return "tokenPage"; // Trả về tên của trang JSP
+    }
+
+    @PostMapping("/verify-token")
+    public String verifyToken(@RequestParam("email") String email, @RequestParam("token") String token) {
+        // Kiểm tra xem token có hợp lệ hay không
+        AccountEntity accountEntity = accountRepository.findByEmailAndToken(email, token);
+        if (accountEntity != null && isValidToken(accountEntity)) {
+            // Chuyển trạng thái của tài khoản sang active
+            accountEntity.setStatus(UserStatus.ACTIVE);
+            accountRepository.save(accountEntity);
+            // Redirect đến trang thành công hoặc trang chính
+            return "redirect:/login";
+        } else {
+            // Token không hợp lệ, redirect về trang nhập token với thông báo lỗi
+            return "redirect:/token?email=" + email + "&error=invalid_token";
+        }
+    }
+
+    private boolean isValidToken(AccountEntity accountEntity) {
+        // Kiểm tra xem token có hợp lệ hay không, ví dụ: kiểm tra thời gian hết hạn
+        LocalDateTime expirationTime = accountEntity.getTokenExpiration();
+        return expirationTime.isAfter(LocalDateTime.now());
+    }
+
+
+
+    private String generateRandomToken() {
+        // Tạo một số ngẫu nhiên từ 100000 đến 999999
+        int randomNum = ThreadLocalRandom.current().nextInt(100000, 999999 + 1);
+        return String.valueOf(randomNum);
     }
 
 }
