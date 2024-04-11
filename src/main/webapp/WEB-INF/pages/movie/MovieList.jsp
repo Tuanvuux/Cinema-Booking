@@ -66,7 +66,7 @@
                     <c:forEach var="movie" items="${movieList}">
                         <div class="movie"
                             style="display: flex;flex-direction: column; border: 1px solid gray; background-color: black; align-items: center;">
-                            <img src="movie/getPhoto/<c:out value='${movie.movieId}'/>"
+                            <img src="<c:url value='/movie/getPhoto/'/>${movie.movieId}"
                                 style=" width:220px; height: 250px; border-radius: 10px 10px 0px 0px;">
                             <div class="movie-inf" style=" width:220px;">
                                 <center>
