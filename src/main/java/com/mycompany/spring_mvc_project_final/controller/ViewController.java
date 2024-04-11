@@ -60,6 +60,11 @@ public class ViewController {
             movieList = (List<Movie>) movieRepository.findAll();
         } else {
             movieList = movieRepository.findByMovieNameOrDirectorOrProducerOrActor(searchInput, searchInput, searchInput, searchInput);
+//            // Lấy dữ liệu ảnh cho mỗi phim trong danh sách kết quả tìm kiếm
+//            for (Movie movie : movieList) {
+//                byte[] ph = movie.getPhoto();
+//                movie.setPhoto(ph); // Đặt dữ liệu ảnh vào đối tượng phim để sử dụng trong giao diện người dùng
+//            }
         }
         model.addAttribute("movieList", movieList);
         return "movie/MovieList";
