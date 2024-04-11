@@ -18,7 +18,7 @@
                     <div class="header__top__left">
                         <p>
                             <sec:authorize access="isAuthenticated()">
-                                Authenticated as 
+                                Xin chào
                                 <sec:authentication property="principal.username"/>
                             </sec:authorize>
                         </p>
@@ -30,6 +30,7 @@
                         <div class="header__top__links">
                             <sec:authorize access="isAuthenticated()">
                                 <sec:authorize access="hasRole('ROLE_ADMIN')">
+                                    <a href="/admin/addMovie">Add Movie</a>
                                     <a href="<c:url value="/admin/home" />">Admin Home</a>
                                     <a href="<c:url value="/admin/add" />">Add Account</a>
                                 </sec:authorize>
