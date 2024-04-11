@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -31,11 +33,10 @@
         }
         /* Định dạng cho thẻ a trong thẻ td */
         td a.movie-link {
-        width: 90px;
+        width: 120px;
             display: block; /* Hiển thị thẻ a như là khối để chiếm toàn bộ chiều rộng của thẻ td */
-            padding: 10px; /* Khoảng cách giữa các nội dung trong thẻ a */
+            padding: 5px; /* Khoảng cách giữa các nội dung trong thẻ a */
             border: 1px solid #ccc; /* Đường viền của thẻ a */
-            border-radius: 5px; /* Bo tròn góc của thẻ a */
             text-align: center; /* Căn giữa nội dung của thẻ a */
             background-color: #f9f9f9; /* Màu nền của thẻ a */
             color: black; /* Màu chữ */
@@ -43,7 +44,8 @@
         }
 
         td a.movie-link:hover {
-            color: #0056b3; /* Màu chữ khi di chuột qua */
+            background-color: #8d0000;
+                        color: white;
         }
 
 
@@ -99,8 +101,13 @@
                         <c:forEach items="${showTimes}" var="showTime">
                             <c:forEach items="${roomShowTimes}" var="roomShowTime">
                                 <c:if test="${movieShowtime.movie.movieId eq movie.movieId and movieShowtime.showTime.showTimeId eq showTime.showTimeId and roomShowTime.showTime.showTimeId eq showTime.showTimeId}">
-                                   <td><a href="/seat?movieId=${roomShowTime.room.roomId}" class="movie-link">${showTime.timeStart} - ${showTime.timeEnd}<br>${roomShowTime.room.roomId}</a></td>
-
+                                    <c:set var="startTime" value="${showTime.timeStart}" />
+                                    <c:set var="endTime" value="${showTime.timeEnd}" />
+                                    <td>
+                                        <a href="/seat?roomId=${roomShowTime.room.roomId}&movieId=${movie.movieId}&showTimeId=${showTime.showTimeId}" class="movie-link">
+                                            ${fn:substring(startTime, 0, 5)} - ${fn:substring(endTime, 0, 5)}<br>${roomShowTime.room.roomId}
+                                        </a>
+                                    </td>
                                 </c:if>
                             </c:forEach>
                         </c:forEach>

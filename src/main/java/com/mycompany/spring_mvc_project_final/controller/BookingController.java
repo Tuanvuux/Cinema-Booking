@@ -69,14 +69,12 @@ public class BookingController {
         return "Room";
     }
     @GetMapping(value = "/seat")
-    public String bookSeatget(@RequestParam("movieId") Long movieId,
+    public String bookSeatget(@RequestParam("roomId") Long roomId,
+                              @RequestParam("movieId") Long movieId,
+                              @RequestParam("showTimeId") Long showTimeId,
                                   HttpServletRequest request, Model model) {
         // Lấy session từ request
         HttpSession session = request.getSession();
-
-
-        Long showTimeId=1L;
-        Long roomId=1L;
         // Lưu giá trị roomId và showTimeId vào session
         session.setAttribute("roomId", roomId);
         session.setAttribute("showTimeId", showTimeId);
