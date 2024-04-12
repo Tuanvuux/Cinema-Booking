@@ -229,6 +229,17 @@ public class BookingController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
+    @PostMapping("/deleteBookedTickets")
+    public ResponseEntity<String> deleteBookedTickets() {
+        // Lấy thời gian hiện tại
+        LocalDateTime currentTime = LocalDateTime.now();
+
+        // Xóa dữ liệu từ bảng BookTicket với điều kiện status = 1 và lastSelectedTime < 15 giây so với thời gian hiện tại
+        // Ví dụ sử dụng JPA repository
+        bookTicketRepository.deleteByStatusAndLastSelectedTimeBefore("1", currentTime.minusSeconds(15));
+
+        return ResponseEntity.ok("Deleted booked tickets successfully.");
+    }
 
 
 

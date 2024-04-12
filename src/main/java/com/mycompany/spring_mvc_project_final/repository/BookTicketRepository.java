@@ -8,6 +8,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,4 +28,8 @@ public interface BookTicketRepository extends JpaRepository<BookTicket,Long> {
 //
 //    @Query("DELETE FROM BookTicket bt WHERE bt.seatId = :seatId")
 //    void deleteBySeatId(Long seatId);
+@Modifying
+@Query("DELETE FROM BookTicket bt WHERE bt.status = :status AND bt.lastSelectedTime < :time")
+void deleteByStatusAndLastSelectedTimeBefore(@Param("status") String status, @Param("time") LocalDateTime time);
+
 }

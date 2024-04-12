@@ -155,6 +155,41 @@
             }
         }
 
+function deleteBookedTickets() {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/deleteBookedTickets", true);
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            console.log("Deleted booked tickets successfully.");
+        } else {
+            console.log("Failed to delete booked tickets.");
+        }
+    };
+    xhr.send();
+}
+
+// Gọi hàm deleteBookedTickets() sau mỗi 10 giây
+setInterval(deleteBookedTickets, 10000);
+
+        function refreshSeatList() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "/getSeatList", true);
+            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var seatList = JSON.parse(xhr.responseText);
+                    // Gọi hàm để cập nhật giao diện với danh sách chỗ ngồi mới
+                    updateSeatUI(seatList);
+                }
+            };
+            xhr.send();
+        }
+
+
+
+
+
     </script>
 
 </body>
