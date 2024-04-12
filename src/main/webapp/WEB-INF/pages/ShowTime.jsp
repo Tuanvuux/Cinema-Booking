@@ -58,7 +58,7 @@
     <div class="ngaychieu" style="display: flex; flex-direction: column; margin: 20px 120px 50px 100px;">
             <h2 style="color: #8d0000;">Chọn ngày chiếu</h2>
             <div class="ngay" style="display: flex; justify-content: center;">
-                <form id="dateForm" action="/booking?movieId=${movie.movieId}" method="post">
+                <form id="dateForm" action="/showtime" method="post">
                     <!-- Địa chỉ endpoint của controller xử lý POST -->
                     <table>
                         <thead>
